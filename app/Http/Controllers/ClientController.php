@@ -98,6 +98,9 @@ class ClientController extends Controller
     public function edit(Client $client)
     {
         //
+        return response()->view('ecommerce.client.edit', [
+            'client' => $client,
+        ]);
     }
 
     /**
@@ -109,7 +112,31 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
+        $validator = Validator($request->all(), [
+            'name' => 'required|string|min:3|max:40',
+            'phone' => 'required|string|min:9|max:20',
+            'email' => 'required|string|min:9|max:45',
+            'location' => 'required|string|min:5|max:100',
+            'status' => 'required|string|in:active,blocked'
+        ]);
         //
+        if (!$validator->fails()) {
+            $client->name = $request->get('name');
+            $client->phone = $request->get('phone');
+            $client->email = $request->get('email');
+            $client->location = $request->get('location');
+            $client->status = $request->get('status') == 'active' ? '1' : '0';
+            $client->notes = $request->get('notes') == NULL ? NULL : $request->get('notes');
+            $isUpdated = $client->save();
+
+            return response()->json([
+                'message' => $isUpdated ? 'Client updated successfully' : 'Faild to update client!',
+            ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        }else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first()
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
