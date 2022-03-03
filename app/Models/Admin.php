@@ -14,4 +14,9 @@ class Admin extends Authenticatable
     {
         return $this->hasMany(Client::class);
     }
+
+    public function contractTypes()
+    {
+        return $this->hasMany(ContractType::class, 'admin_id', 'id');
+    }
 }
