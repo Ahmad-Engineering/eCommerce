@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,4 +17,8 @@ use Illuminate\Support\Facades\Route;
 // Dashboard Route
 Route::get('/', function () {
     return view('ecommerce.index');
+});
+
+Route::prefix('/admin')->group(function () {
+    Route::resource('client', ClientController::class);
 });

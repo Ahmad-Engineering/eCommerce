@@ -21,6 +21,7 @@ class ClientFactory extends Factory
             'email' => $this->faker->email(),
             'location' => $this->faker->streetAddress(),
             'position' => 'client',
+            'status' => '1',
             'password' => Hash::make('password'),
         ];
     }

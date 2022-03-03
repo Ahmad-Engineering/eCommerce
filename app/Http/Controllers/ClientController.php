@@ -15,6 +15,10 @@ class ClientController extends Controller
     public function index()
     {
         //
+        $clients = Client::select(['name', 'email', 'phone', 'location', 'notes', 'status'])->get();
+        return response()->view('ecommerce.client.index', [
+            'clients' => $clients
+        ]);
     }
 
     /**

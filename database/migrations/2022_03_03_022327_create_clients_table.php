@@ -21,6 +21,7 @@ class CreateClientsTable extends Migration
             $table->string('position', 20)->default('client');
             $table->string('location', 100);
             $table->string('password');
+            $table->tinyInteger('status')->default(1);
             $table->time('email_verified_at')->nullable();
             $table->rememberToken();
             $table->text('notes', 300)->nullable();
