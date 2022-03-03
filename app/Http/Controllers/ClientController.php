@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminClients;
 use App\Models\Client;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
@@ -67,9 +68,15 @@ class ClientController extends Controller
             $client->password = Hash::make('password');
             $isCreated = $client->save();
 
+            $adminClients = new AdminClients();
+            $adminClients->admin_id = auth('admin')->user()->id;
+            $client = Client::where('email', $request->get('email'))->first();
+            $adminClients->client_id = $client->id;
+            $isCreatedRelation = $adminClients->save();
+
             return response()->json([
-                'message' => $isCreated ? 'Created Successfully' : 'Faild to create client!',
-            ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+                'message' => $isCreated && $isCreatedRelation ? 'Created Successfully' : 'Faild to create client!',
+            ], $isCreated && $isCreatedRelation ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
         } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first()

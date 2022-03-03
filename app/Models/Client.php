@@ -12,4 +12,8 @@ class Client extends Model
     public function clientSocial () {
         return $this->hasOne(ClientSocial::class, 'client_id', 'id');
     }
+
+    public function admins () {
+        return $this->belongsToMany(Admin::class);
+    }
 }
