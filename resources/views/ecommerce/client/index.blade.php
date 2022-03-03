@@ -101,7 +101,8 @@
                                                 </svg>
                                                 <span>Edit</span>
                                             </a>
-                                            <a class="dropdown-item" id="Link" href="#" onclick="confirmDestroy({{$client->id}}, this)">
+                                            <a class="dropdown-item" id="Link" href="#"
+                                                onclick="confirmDestroy({{ $client->id }}, this)">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                     stroke-linecap="round" stroke-linejoin="round"
@@ -128,32 +129,64 @@
         <!-- Modal to add new user starts-->
         <div class="modal modal-slide-in new-user-modal fade" id="modals-slide-in">
             <div class="modal-dialog">
-                <form class="add-new-user modal-content pt-0" novalidate="novalidate">
+                <form class="add-new-user modal-content pt-0" novalidate="novalidate" id="create-form">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
                     <div class="modal-header mb-1">
-                        <h5 class="modal-title" id="exampleModalLabel">New User</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">New Client</h5>
                     </div>
                     <div class="modal-body flex-grow-1">
                         <div class="mb-1">
-                            <label class="form-label" for="basic-icon-default-fullname">Full Name</label>
-                            <input type="text" class="form-control dt-full-name" id="basic-icon-default-fullname"
+                            <label class="form-label" for="basic-icon-default-fullname">Name</label>
+                            <input type="text" class="form-control dt-full-name" id="name"
                                 placeholder="John Doe" name="user-fullname" aria-label="John Doe"
                                 aria-describedby="basic-icon-default-fullname2">
                         </div>
                         <div class="mb-1">
-                            <label class="form-label" for="basic-icon-default-uname">Username</label>
-                            <input type="text" id="basic-icon-default-uname" class="form-control dt-uname"
+                            <label class="form-label" for="basic-icon-default-uname">Phone</label>
+                            <input type="number" id="phone" class="form-control dt-uname"
                                 placeholder="Web Developer" aria-label="jdoe1" aria-describedby="basic-icon-default-uname2"
                                 name="user-name">
                         </div>
                         <div class="mb-1">
                             <label class="form-label" for="basic-icon-default-email">Email</label>
-                            <input type="text" id="basic-icon-default-email" class="form-control dt-email"
+                            <input type="text" id="email" class="form-control dt-email"
                                 placeholder="john.doe@example.com" aria-label="john.doe@example.com"
                                 aria-describedby="basic-icon-default-email2" name="user-email">
                             <small class="form-text"> You can use letters, numbers &amp; periods </small>
                         </div>
                         <div class="mb-1">
+                            <label class="form-label" for="basic-icon-default-uname">Location</label>
+                            <input type="text" id="location" class="form-control dt-uname"
+                                placeholder="59531 Russell Trail" aria-label="jdoe1"
+                                aria-describedby="basic-icon-default-uname2" name="location">
+                        </div>
+                        <div class="mb-1">
+                            <label class="form-label" for="basic-icon-default-uname">Note</label>
+                            <input type="text" id="notes" class="form-control dt-uname"
+                                placeholder="Remember this note ... " aria-label="jdoe1"
+                                aria-describedby="basic-icon-default-uname2" name="note">
+                        </div>
+                        <div class="mb-1">
+                            <label class="form-label" for="basic-icon-default-uname">Password</label>
+                            <input type="text" id="password" class="form-control dt-uname"
+                                placeholder="Like: Assdswlkfd!$21s2~" aria-label="jdoe1" value="{{$password}}"
+                                aria-describedby="basic-icon-default-uname2" name="password">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="user-plan">Select Status</label>
+                            <select id="status" class="form-select">
+                                <option value="active">Active</option>
+                                <option value="blocked">Blocked</option>
+                            </select>
+                        </div>
+                        <div class="mb-1">
+                            <label class="form-label" for="basic-icon-default-email">Position</label>
+                            <input type="text" id="position" class="form-control dt-email"
+                                placeholder="john.doe@example.com" aria-label="john.doe@example.com"
+                                aria-describedby="basic-icon-default-email2" name="user-email" value="client" readonly>
+                            <small class="form-text"> You cannt change this position for client. </small>
+                        </div>
+                        {{-- <div class="mb-1">
                             <label class="form-label" for="user-role">User Role</label>
                             <select id="user-role" class="form-select">
                                 <option value="subscriber">Subscriber</option>
@@ -162,8 +195,8 @@
                                 <option value="author">Author</option>
                                 <option value="admin">Admin</option>
                             </select>
-                        </div>
-                        <div class="mb-2">
+                        </div> --}}
+                        {{-- <div class="mb-2">
                             <label class="form-label" for="user-plan">Select Plan</label>
                             <select id="user-plan" class="form-select">
                                 <option value="basic">Basic</option>
@@ -171,9 +204,10 @@
                                 <option value="company">Company</option>
                                 <option value="team">Team</option>
                             </select>
-                        </div>
-                        <button type="submit"
-                            class="btn btn-primary me-1 data-submit waves-effect waves-float waves-light">Submit</button>
+                        </div> --}}
+
+                        <button type="button"
+                            class="btn btn-primary me-1 data-submit waves-effect waves-float waves-light" onclick="store()">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary waves-effect"
                             data-bs-dismiss="modal">Cancel</button>
                     </div>
@@ -186,6 +220,8 @@
 
 
 @section('scripts')
+
+    {{-- Delete Client --}}
     <script>
         function confirmDestroy(id, refranec) {
             Swal.fire({
@@ -231,6 +267,36 @@
                 showConfirmButton: false,
                 timer: 2000
             });
+        }
+    </script>
+
+    {{-- Add Client --}}
+    <script>
+        function store() {
+            // admin/client
+            axios.post('/admin/client', {
+                    name: document.getElementById('name').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value,
+                    location: document.getElementById('location').value,
+                    password: document.getElementById('password').value,
+                    status: document.getElementById('status').value,
+                })
+                .then(function(response) {
+                    // handle success
+                    console.log(response);
+                    toastr.success(response.data.message);
+                    document.getElementById('create-form').reset();
+                    location.reload();
+                })
+                .catch(function(error) {
+                    // handle error
+                    console.log(error);
+                    toastr.error(error.response.data.message)
+                })
+                .then(function() {
+                    // always executed
+                });
         }
     </script>
 @endsection
