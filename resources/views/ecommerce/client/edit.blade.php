@@ -547,7 +547,9 @@
                                                     </svg>
                                                 </span>
                                                 <input id="twitter" type="text" class="form-control"
-                                                    value="{{ $client->clientSocial->twitter}}"
+                                                    @if (!is_null($client->clientSocial))
+                                                        value="{{ $client->clientSocial->twitter}}"
+                                                    @endif
                                                     placeholder="https://www.twitter.com/" aria-describedby="basic-addon3">
                                             </div>
                                         </div>
@@ -565,7 +567,9 @@
                                                     </svg>
                                                 </span>
                                                 <input id="facebook" type="text" class="form-control"
-                                                    value="{{ $client->clientSocial->facebook }}"
+                                                @if (!is_null($client->clientSocial))
+                                                value="{{ $client->clientSocial->facebook}}"
+                                            @endif
                                                     placeholder="https://www.facebook.com/" aria-describedby="basic-addon4">
                                             </div>
                                         </div>
@@ -583,7 +587,9 @@
                                                     </svg>
                                                 </span>
                                                 <input id="instagram" type="text" class="form-control"
-                                                    value="{{ $client->clientSocial->instagram }}"
+                                                @if (!is_null($client->clientSocial))
+                                                value="{{ $client->clientSocial->instagram}}"
+                                            @endif
                                                     placeholder="https://www.instagram.com/"
                                                     aria-describedby="basic-addon5">
                                             </div>
@@ -602,7 +608,9 @@
                                                     </svg>
                                                 </span>
                                                 <input id="github" type="text" class="form-control"
-                                                    value="{{ $client->clientSocial->github }}"
+                                                @if (!is_null($client->clientSocial))
+                                                value="{{ $client->clientSocial->github}}"
+                                            @endif
                                                     placeholder="https://www.github.com/" aria-describedby="basic-addon9">
                                             </div>
                                         </div>
@@ -623,7 +631,9 @@
                                                     </svg>
                                                 </span>
                                                 <input id="codepen" type="text" class="form-control"
-                                                    value="{{ $client->clientSocial->codepen }}"
+                                                @if (!is_null($client->clientSocial))
+                                                value="{{ $client->clientSocial->codepen}}"
+                                            @endif
                                                     placeholder="https://www.codepen.com/" aria-describedby="basic-addon12">
                                             </div>
                                         </div>
@@ -662,7 +672,9 @@
                                                     </svg>
                                                 </span>
                                                 <input id="slack" type="text" class="form-control"
-                                                    value="{{ $client->clientSocial->slack }}"
+                                                @if (!is_null($client->clientSocial))
+                                                value="{{ $client->clientSocial->slack}}"
+                                            @endif
                                                     placeholder="https://www.slack.com/" aria-describedby="basic-addon11">
                                             </div>
                                         </div>

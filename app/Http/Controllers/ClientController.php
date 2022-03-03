@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\AdminClients;
 use App\Models\Client;
+use App\Models\ClientSocial;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,7 +25,11 @@ class ClientController extends Controller
     {
         //
         $password = random_int(100000, 99999999);
-        $clients = Client::select(['id', 'name', 'email', 'phone', 'location', 'notes', 'status'])->get();
+        $clients = Client::select(['id', 'name', 'email', 'phone', 'location', 'notes', 'status'])
+            ->whereHas('admins', function ($query) {
+                $query->where('admin_id', auth('admin')->user()->id);
+            })
+            ->get();
         return response()->view('ecommerce.client.index', [
             'clients' => $clients,
             'password' => $password,
@@ -67,16 +74,17 @@ class ClientController extends Controller
             $client->notes = $request->get('notes') == NULL ? NULL : $request->get('notes');
             $client->password = Hash::make('password');
             $isCreated = $client->save();
-
-            $adminClients = new AdminClients();
-            $adminClients->admin_id = auth('admin')->user()->id;
             $client = Client::where('email', $request->get('email'))->first();
-            $adminClients->client_id = $client->id;
-            $isCreatedRelation = $adminClients->save();
+
+            DB::insert('insert into admin_client (admin_id, client_id, cooperate) values (?, ?, ?)', [
+                auth('admin')->user()->id,
+                $client->id,
+                1,
+            ]);
 
             return response()->json([
-                'message' => $isCreated && $isCreatedRelation ? 'Created Successfully' : 'Faild to create client!',
-            ], $isCreated && $isCreatedRelation ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+                'message' => $isCreated ? 'Created Successfully' : 'Faild to create client!',
+            ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
         } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first()
