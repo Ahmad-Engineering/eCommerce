@@ -70,8 +70,7 @@ class ClientController extends Controller
             return response()->json([
                 'message' => $isCreated ? 'Created Successfully' : 'Faild to create client!',
             ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
-
-        }else {
+        } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first()
             ], Response::HTTP_BAD_REQUEST);
@@ -98,8 +97,10 @@ class ClientController extends Controller
     public function edit(Client $client)
     {
         //
+        $clientSocial = $client->clientSocial();
         return response()->view('ecommerce.client.edit', [
             'client' => $client,
+            'clientSocial' => $clientSocial,
         ]);
     }
 
@@ -132,7 +133,7 @@ class ClientController extends Controller
             return response()->json([
                 'message' => $isUpdated ? 'Client updated successfully' : 'Faild to update client!',
             ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
-        }else {
+        } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first()
             ], Response::HTTP_BAD_REQUEST);
@@ -154,7 +155,7 @@ class ClientController extends Controller
                 'title' => 'Deleted',
                 'text' => 'Client deleted successfully',
             ], Response::HTTP_OK);
-        }else {
+        } else {
             return response()->json([
                 'icon' => 'error',
                 'title' => 'Faild',

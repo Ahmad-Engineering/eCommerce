@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientChangePasswordController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ClientSocialController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +35,8 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     // Change Password
     Route::get('/client/{id}/change-password', [ClientChangePasswordController::class, 'showChangePassword'])->name('client.change-password');
     Route::post('/client/change-password', [ClientChangePasswordController::class, 'changePassword']);
+    // Social Media
+    Route::resource('client-social', ClientSocialController::class);
     // -- End Clients Routes --
 
     // -- Begin Admin Routes --

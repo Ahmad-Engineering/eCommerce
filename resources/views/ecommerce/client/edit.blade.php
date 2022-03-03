@@ -105,7 +105,8 @@
                                             <div class="mb-1">
                                                 <label class="form-label" for="name">Name</label>
                                                 <input type="text" class="form-control" placeholder="Name"
-                                                    value="{{ $client->name }}" name="name" id="name" aria-invalid="false">
+                                                    value="{{ $client->name }}" name="name" id="name"
+                                                    aria-invalid="false">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -361,7 +362,8 @@
                                         </div>
                                         <div class="col-12 d-flex flex-sm-row flex-column mt-2">
                                             <button type="button"
-                                                class="btn btn-primary mb-1 mb-sm-0 me-0 me-sm-1 waves-effect waves-float waves-light" onclick="update({{$client->id}})">Save
+                                                class="btn btn-primary mb-1 mb-sm-0 me-0 me-sm-1 waves-effect waves-float waves-light"
+                                                onclick="update({{ $client->id }})">Save
                                                 Changes</button>
                                             <button type="button" onclick="reloadPage()"
                                                 class="btn btn-outline-secondary waves-effect">Reset</button>
@@ -544,8 +546,8 @@
                                                         </path>
                                                     </svg>
                                                 </span>
-                                                <input id="twitter-input" type="text" class="form-control"
-                                                    value="https://www.twitter.com/adoptionism744"
+                                                <input id="twitter" type="text" class="form-control"
+                                                    value="{{ $client->clientSocial->twitter}}"
                                                     placeholder="https://www.twitter.com/" aria-describedby="basic-addon3">
                                             </div>
                                         </div>
@@ -562,8 +564,8 @@
                                                         </path>
                                                     </svg>
                                                 </span>
-                                                <input id="facebook-input" type="text" class="form-control"
-                                                    value="https://www.facebook.com/adoptionism664"
+                                                <input id="facebook" type="text" class="form-control"
+                                                    value="{{ $client->clientSocial->facebook }}"
                                                     placeholder="https://www.facebook.com/" aria-describedby="basic-addon4">
                                             </div>
                                         </div>
@@ -580,8 +582,8 @@
                                                         <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                                                     </svg>
                                                 </span>
-                                                <input id="instagram-input" type="text" class="form-control"
-                                                    value="https://www.instagram.com/adopt-ionism744"
+                                                <input id="instagram" type="text" class="form-control"
+                                                    value="{{ $client->clientSocial->instagram }}"
                                                     placeholder="https://www.instagram.com/"
                                                     aria-describedby="basic-addon5">
                                             </div>
@@ -599,8 +601,8 @@
                                                         </path>
                                                     </svg>
                                                 </span>
-                                                <input id="github-input" type="text" class="form-control"
-                                                    value="https://www.github.com/madop818"
+                                                <input id="github" type="text" class="form-control"
+                                                    value="{{ $client->clientSocial->github }}"
                                                     placeholder="https://www.github.com/" aria-describedby="basic-addon9">
                                             </div>
                                         </div>
@@ -620,8 +622,8 @@
                                                         <line x1="12" y1="2" x2="12" y2="8.5"></line>
                                                     </svg>
                                                 </span>
-                                                <input id="codepen-input" type="text" class="form-control"
-                                                    value="https://www.codepen.com/adoptism243"
+                                                <input id="codepen" type="text" class="form-control"
+                                                    value="{{ $client->clientSocial->codepen }}"
                                                     placeholder="https://www.codepen.com/" aria-describedby="basic-addon12">
                                             </div>
                                         </div>
@@ -659,14 +661,14 @@
                                                         </path>
                                                     </svg>
                                                 </span>
-                                                <input id="slack-input" type="text" class="form-control"
-                                                    value="@adoptionism744" placeholder="https://www.slack.com/"
-                                                    aria-describedby="basic-addon11">
+                                                <input id="slack" type="text" class="form-control"
+                                                    value="{{ $client->clientSocial->slack }}"
+                                                    placeholder="https://www.slack.com/" aria-describedby="basic-addon11">
                                             </div>
                                         </div>
 
                                         <div class="col-12 d-flex flex-sm-row flex-column mt-2">
-                                            <button type="submit"
+                                            <button type="button" onclick="store({{ $client->id }})"
                                                 class="btn btn-primary mb-1 mb-sm-0 me-0 me-sm-1 waves-effect waves-float waves-light">Save
                                                 Changes</button>
                                             <button type="reset"
@@ -720,8 +722,38 @@
     </script>
 
     <script>
-        function reloadPage (){
+        function reloadPage() {
             location.reload();
+        }
+    </script>
+
+    <script>
+        function store(id) {
+            // admin/client-social
+            axios.post('/admin/client-social', {
+                    twitter: document.getElementById('twitter').value,
+                    facebook: document.getElementById('facebook').value,
+                    instagram: document.getElementById('instagram').value,
+                    github: document.getElementById('github').value,
+                    codepen: document.getElementById('codepen').value,
+                    slack: document.getElementById('slack').value,
+                    client_id: id,
+                })
+                .then(function(response) {
+                    // handle success
+                    console.log(response);
+                    toastr.success(response.data.message);
+                    document.getElementById('create-form').reset();
+                    location.reload();
+                })
+                .catch(function(error) {
+                    // handle error
+                    console.log(error);
+                    toastr.error(error.response.data.message)
+                })
+                .then(function() {
+                    // always executed
+                });
         }
     </script>
 @endsection

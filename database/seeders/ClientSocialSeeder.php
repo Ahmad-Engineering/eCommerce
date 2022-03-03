@@ -15,6 +15,6 @@ class ClientSocialSeeder extends Seeder
     public function run()
     {
         //
-        ClientSocial::factory(50)->create();
+        ClientSocial::factory(5)->create();
     }
 }
