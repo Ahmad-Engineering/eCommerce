@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Admin;
 use App\Models\Client;
+use App\Models\ClientSocial;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,5 +19,6 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         Admin::factory(1)->create();
         Client::factory(10)->create();
+        ClientSocial::factory(50)->create();
     }
 }
