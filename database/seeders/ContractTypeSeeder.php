@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ContractType;
 use Illuminate\Database\Seeder;
 
 class ContractTypeSeeder extends Seeder
@@ -14,5 +15,6 @@ class ContractTypeSeeder extends Seeder
     public function run()
     {
         //
+        ContractType::factory(5)->create();
     }
 }

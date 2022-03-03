@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ContractTypeFactory extends Factory
@@ -15,6 +16,9 @@ class ContractTypeFactory extends Factory
     {
         return [
             //
+            'type' => $this->faker->lastName(),
+            'status' => '1',
+            'admin_id' => Admin::inRandomOrder()->first()->id,
         ];
     }
 }

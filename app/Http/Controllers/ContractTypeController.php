@@ -15,6 +15,10 @@ class ContractTypeController extends Controller
     public function index()
     {
         //
+        $contractTypes = ContractType::where('admin_id', auth('admin')->user()->id)->get();
+        return response()->view('ecommerce.contract.index', [
+            'contractTypes' => $contractTypes
+        ]);
     }
 
     /**

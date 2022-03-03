@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\AdminClients;
 use App\Models\Client;
 use App\Models\ClientSocial;
+use App\Models\ContractType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,5 +22,6 @@ class DatabaseSeeder extends Seeder
         Admin::factory(1)->create();
         Client::factory(10)->create();
         ClientSocial::factory(5)->create();
+        ContractType::factory(5)->create();
     }
 }

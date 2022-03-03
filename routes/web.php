@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientChangePasswordController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientSocialController;
+use App\Http\Controllers\ContractTypeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,6 +44,11 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     // Resource
     Route::resource('cpanel', AdminController::class);
     // -- End Clients Routes --
+
+    // -- Begin Contract Type Routes --
+    // Resource
+    Route::resource('contract-type', ContractTypeController::class);
+    // -- End Contract Type Routes --
 
     // Dashboard Route
     Route::get('/', function () {
