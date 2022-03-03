@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientChangePasswordController;
 use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
@@ -15,12 +17,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Dashboard Route
-Route::get('/', function () {
-    return view('ecommerce.index');
+
+
+// Authentaction Routes
+Route::prefix('auth')->group(function () {
+    Route::get('{guard}/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('login', [AuthController::class, 'login']);
 });
 
-Route::prefix('/admin')->group(function () {
+// Admin Dashboard
+Route::prefix('/admin')->middleware('auth:admin')->group(function () {
 
     // -- Begin Clients Routes --
     // Resource
@@ -30,4 +36,16 @@ Route::prefix('/admin')->group(function () {
     Route::post('/client/change-password', [ClientChangePasswordController::class, 'changePassword']);
     // -- End Clients Routes --
 
+    // -- Begin Admin Routes --
+    // Resource
+    Route::resource('cpanel', AdminController::class);
+    // -- End Clients Routes --
+
+    // Dashboard Route
+    Route::get('/', function () {
+        return view('ecommerce.index');
+    });
+
+    // Logout Route
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
