@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ClientController extends Controller
 {
@@ -15,7 +16,7 @@ class ClientController extends Controller
     public function index()
     {
         //
-        $clients = Client::select(['name', 'email', 'phone', 'location', 'notes', 'status'])->get();
+        $clients = Client::select(['id', 'name', 'email', 'phone', 'location', 'notes', 'status'])->get();
         return response()->view('ecommerce.client.index', [
             'clients' => $clients
         ]);
@@ -85,5 +86,18 @@ class ClientController extends Controller
     public function destroy(Client $client)
     {
         //
+        if ($client->delete()) {
+            return response()->json([
+                'icon' => 'success',
+                'title' => 'Deleted',
+                'text' => 'Client deleted successfully',
+            ], Response::HTTP_OK);
+        }else {
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'Faild',
+                'text' => 'Faild to delete client',
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

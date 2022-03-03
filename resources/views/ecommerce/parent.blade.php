@@ -40,6 +40,9 @@
     <link rel="stylesheet" type="text/css" href="{{asset('ecommerce//assets/css/style.css')}}">
     <!-- END: Custom CSS-->
 
+    <!-- Toastr -->
+    <link rel="stylesheet" href="{{asset('masged/plugins/toastr/toastr.min.css')}}">
+
     @yield('styles')
 </head>
 <!-- END: Head-->
@@ -1427,6 +1430,12 @@
             }
         })
     </script>
+    {{-- SWEET ALERT --}}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- AXIOS LIBRARY --}}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Toastr -->
+    <script src="{{asset('masged/plugins/toastr/toastr.min.js')}}"></script>
     @yield('scripts')
 </body>
 <!-- END: Body-->

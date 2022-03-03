@@ -38,8 +38,8 @@
                             <th class="control sorting_disabled" rowspan="1" colspan="1"
                                 style="width: 12.5312px; display: none;" aria-label=""></th>
                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                            colspan="1" style="width: 61.0625px;" aria-label="User: activate to sort column ascending">
-                            No.</th>
+                                colspan="1" style="width: 61.0625px;" aria-label="User: activate to sort column ascending">
+                                No.</th>
                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                 colspan="1" style="width: 61.0625px;" aria-label="User: activate to sort column ascending">
                                 Name</th>
@@ -66,11 +66,11 @@
                         @foreach ($clients as $client)
                             <tr class="odd">
                                 {{-- <td valign="top" colspan="6" class="dataTables_empty">Loading...</td> --}}
-                                <td>{{$no}}</td>
-                                <td>{{$client->name}}</td>
-                                <td>{{$client->email}}</td>
-                                <td>{{$client->phone}}</td>
-                                <td>{{$client->location}}</td>
+                                <td>{{ $no }}</td>
+                                <td>{{ $client->name }}</td>
+                                <td>{{ $client->email }}</td>
+                                <td>{{ $client->phone }}</td>
+                                <td>{{ $client->location }}</td>
                                 @if ($client->status)
                                     <td><span class="badge rounded-pill badge-light-primary me-1">Active</span></td>
                                 @else
@@ -78,16 +78,39 @@
                                 @endif
                                 <td>
                                     <div class="dropdown">
-                                        <button type="button" class="btn btn-sm dropdown-toggle hide-arrow waves-effect waves-float waves-light" data-bs-toggle="dropdown">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                                        <button type="button"
+                                            class="btn btn-sm dropdown-toggle hide-arrow waves-effect waves-float waves-light"
+                                            data-bs-toggle="dropdown">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="feather feather-more-vertical">
+                                                <circle cx="12" cy="12" r="1"></circle>
+                                                <circle cx="12" cy="5" r="1"></circle>
+                                                <circle cx="12" cy="19" r="1"></circle>
+                                            </svg>
                                         </button>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="#">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 me-50"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                    class="feather feather-edit-2 me-50">
+                                                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z">
+                                                    </path>
+                                                </svg>
                                                 <span>Edit</span>
                                             </a>
-                                            <a class="dropdown-item" href="#">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash me-50"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            <a class="dropdown-item" id="Link" href="#" onclick="confirmDestroy({{$client->id}}, this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                    class="feather feather-trash me-50">
+                                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                                    <path
+                                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                                    </path>
+                                                </svg>
                                                 <span>Delete</span>
                                             </a>
                                         </div>
@@ -159,4 +182,55 @@
         </div>
         <!-- Modal to add new user Ends-->
     </div>
+@endsection
+
+
+@section('scripts')
+    <script>
+        function confirmDestroy(id, refranec) {
+            Swal.fire({
+                title: 'You\'re close to delete client, are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    destroy(id, refranec);
+                }
+            });
+        }
+
+        function destroy(id, refranec) {
+            // admin/client/{client}
+            axios.delete('/admin/client/' + id)
+                .then(function(response) {
+                    // handle success
+                    console.log(response);
+                    refranec.closest('tr').remove();
+                    location.reload();
+                    showDeletingResult(response.data);
+                })
+                .catch(function(error) {
+                    // handle error
+                    console.log(error);
+                    showDeletingResult(error.response.data);
+                })
+                .then(function() {
+                    // always executed
+                });
+        }
+
+        function showDeletingResult(data) {
+            Swal.fire({
+                icon: data.icon,
+                title: data.title,
+                text: data.text,
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+    </script>
 @endsection
