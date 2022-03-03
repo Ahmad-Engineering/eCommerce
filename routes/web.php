@@ -44,8 +44,12 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     // Dashboard Route
     Route::get('/', function () {
         return view('ecommerce.index');
-    });
+    })->name('home');
 
     // Logout Route
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::fallback(function () {
+    return view('ecommerce.page-not-found');
 });
