@@ -20,4 +20,8 @@ class Contract extends Model
     public function admin () {
         return $this->belongsTo(Admin::class, 'admin_id', 'id');
     }
+
+    public function paymentMethods () {
+        return $this->hasMany(PaymentMethod::class);
+    }
 }

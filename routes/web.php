@@ -7,6 +7,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientSocialController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\ContractTypeController;
+use App\Http\Controllers\PaymentMethodController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,6 +56,11 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     // Resource
     Route::resource('contract', ContractController::class);
     // -- End Contract Routes --
+
+    // -- Begin Payment Method Routes --
+    // Resource
+    Route::resource('payment-method', PaymentMethodController::class);
+    // -- End Payment Method Routes --
 
     // Dashboard Route
     Route::get('/', function () {
