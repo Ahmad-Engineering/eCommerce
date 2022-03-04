@@ -17,6 +17,10 @@ class PaymentMethodController extends Controller
     public function index()
     {
         //
+        $paymentMethods = PaymentMethod::where('admin_id', auth('admin')->user()->id)->get();
+        return response()->view('ecommerce.payment method.index', [
+            'paymentMethods' => $paymentMethods,
+        ]);
     }
 
     /**
@@ -101,5 +105,18 @@ class PaymentMethodController extends Controller
     public function destroy(PaymentMethod $paymentMethod)
     {
         //
+        if ($paymentMethod->delete()) {
+            return response()->json([
+                'icon' => 'success',
+                'title' => 'Deleted',
+                'text' => 'Payment method deleted successfully',
+            ], Response::HTTP_OK);
+        }else {
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'Faild',
+                'text' => 'Faild to delete payment method',
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 }
