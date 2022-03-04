@@ -74,3 +74,8 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
 Route::fallback(function () {
     return view('ecommerce.page-not-found');
 });
+
+
+Route::get('test', function () {
+    return view('ecommerce.contract.form-date-time-picker');
+});

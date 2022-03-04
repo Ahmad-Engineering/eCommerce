@@ -1581,7 +1581,7 @@
     {{-- AXIOS LIBRARY --}}
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Toastr -->
-    <script src="{{ asset('masged/plugins/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('ecommerce/plugins/toastr/toastr.min.js') }}"></script>
     @yield('scripts')
 </body>
 <!-- END: Body-->
