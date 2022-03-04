@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\ContractType;
+use Dotenv\Validator;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ContractTypeController extends Controller
 {
@@ -29,6 +32,7 @@ class ContractTypeController extends Controller
     public function create()
     {
         //
+        return response()->view('ecommerce.contract.add-type-contract');
     }
 
     /**
@@ -39,7 +43,26 @@ class ContractTypeController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator($request->all(), [
+            'type' => 'required|string|min:3|max:30',
+            'status' => 'required|string|in:active,pending'
+        ]);
         //
+        if (!$validator->fails()) {
+            $contractType = new ContractType();
+            $contractType->type = $request->get('type');
+            $contractType->status = $request->get('status') == 'active' ? '1' : '0';
+            $contractType->admin_id = auth('admin')->user()->id;
+            $isCreated = $contractType->save();
+
+            return response()->json([
+                'message' => $isCreated ? 'Contract type added successfully' : 'Faild to add contract type',
+            ], $isCreated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        }else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first()
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
