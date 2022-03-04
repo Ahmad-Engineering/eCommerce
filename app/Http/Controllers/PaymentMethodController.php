@@ -82,6 +82,9 @@ class PaymentMethodController extends Controller
     public function edit(PaymentMethod $paymentMethod)
     {
         //
+        return response()->view('ecommerce.payment method.edit-payment-method', [
+            'paymentMethod' => $paymentMethod,
+        ]);
     }
 
     /**
@@ -93,7 +96,25 @@ class PaymentMethodController extends Controller
      */
     public function update(Request $request, PaymentMethod $paymentMethod)
     {
+        $validator = Validator($request->all(), [
+            'name' => 'required|string|min:3|max:20',
+            'status' => 'required|string|in:active,blocked'
+        ]);
         //
+        if (!$validator->fails()) {
+            // $paymentMethod = $request->get('name')
+            $paymentMethod->name = $request->get('name');
+            $paymentMethod->status = $request->get('status') == 'active' ? '1' : '0';
+            $isUpdated = $paymentMethod->save();
+
+            return response()->json([
+                'message' => $isUpdated ? 'Payment updated successfully' : 'Faild to update payment',
+            ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        }else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
