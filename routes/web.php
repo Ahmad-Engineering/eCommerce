@@ -40,6 +40,12 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     Route::post('/client/change-password', [ClientChangePasswordController::class, 'changePassword']);
     // Social Media
     Route::resource('client-social', ClientSocialController::class);
+    // View Blocked Client
+    Route::get('blocked-clients', [ClientController::class, 'blockedClient'])->name('blocked.client');
+    // Un-Block Client
+    Route::put('unblock-client/{id}/client', [ClientController::class, 'unblockClient']);
+    // Block Client
+    Route::put('block-client/{id}/client', [ClientController::class, 'blockClient'])->name('block.client');
     // -- End Clients Routes --
 
     // -- Begin Admin Routes --

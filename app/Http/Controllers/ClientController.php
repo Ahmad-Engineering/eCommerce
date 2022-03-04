@@ -178,4 +178,71 @@ class ClientController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
     }
+
+    public function blockedClient () {
+        $clients = Client::whereHas('admins', function ($query) {
+            $query->where('admin_id', auth('admin')->user()->id);
+        })
+        ->where('status', 0)
+        ->get();
+        return response()->view('ecommerce.client.blocked-clients', [
+            'clients' => $clients,
+        ]);
+    }
+
+    public function unblockClient ($id) {
+        $validator = Validator([
+            'id' => 'required|integer|exists:clients,id',
+        ]);
+
+        if (!$validator->fails()) {
+            $client = Client::whereHas('admins', function ($query) {
+                $query->where('admin_id', auth('admin')->user()->id);
+            })
+            ->where('id', $id)
+            ->first();
+
+            if (is_null($client))
+                return redirect()->route('blocked.client');
+
+            $client->status = '1';
+            $isUnBlocked = $client->save();
+
+            return response()->json([
+                'message' => $isUnBlocked ? 'Client un-blocked successfully' : 'Faild to un-block client',
+            ], $isUnBlocked ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        }else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function blockClient ($id) {
+        $validator = Validator([
+            'id' => 'required|integer|exists:clients,id',
+        ]);
+
+        if (!$validator->fails()) {
+            $client = Client::whereHas('admins', function ($query) {
+                $query->where('admin_id', auth('admin')->user()->id);
+            })
+            ->where('id', $id)
+            ->first();
+
+            if (is_null($client))
+                return redirect()->route('client.index');
+
+            $client->status = '0';
+            $isBlocked = $client->save();
+
+            return response()->json([
+                'message' => $isBlocked ? 'Client blocked successfully' : 'Faild to block client',
+            ], $isBlocked ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        }else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
 }
