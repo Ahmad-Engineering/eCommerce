@@ -17,7 +17,7 @@
                                 $username = explode('@', auth('admin')->user()->email);
                             @endphp
                             {{ $username[0] }}
-                        </code>  username.
+                        </code> username.
                     </p>
                 </div>
                 <div class="table-responsive">
@@ -38,12 +38,12 @@
                             @foreach ($contractTypes as $contractType)
                                 <tr>
                                     <td>
-                                        {{$no}}
+                                        {{ $no }}
                                     </td>
                                     <td>
                                         <img src="../../../app-assets/images/icons/angular.svg" class="me-75"
                                             height="20" width="20" alt="Angular">
-                                        <span class="fw-bold">{{$contractType->type}}</span>
+                                        <span class="fw-bold">{{ $contractType->type }}</span>
                                     </td>
                                     <td>
                                         @if ($contractType->status)
@@ -53,9 +53,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{
-                                            $contractType->created_at
-                                        }}
+                                        {{ $contractType->created_at }}
                                     </td>
                                     <td>
                                         <div class="dropdown">
@@ -72,7 +70,7 @@
                                                 </svg>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">
+                                                <a class="dropdown-item" href="{{ route('contract-type.edit', $contractType->id) }}">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -82,7 +80,8 @@
                                                     </svg>
                                                     <span>Edit</span>
                                                 </a>
-                                                <a class="dropdown-item" href="#">
+                                                <a class="dropdown-item" href="#" id="Link"
+                                                    onclick="confirmDestroy({{ $contractType->id }}, this)">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -99,7 +98,7 @@
                                     </td>
                                 </tr>
                                 @php
-                                    ++$no
+                                    ++$no;
                                 @endphp
                             @endforeach
                         </tbody>
@@ -112,5 +111,52 @@
 
 
 @section('scripts')
+    {{-- Delete Contract Type --}}
+    <script>
+        function confirmDestroy(id, refranec) {
+            Swal.fire({
+                title: 'You\'re close to delete client, are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    destroy(id, refranec);
+                }
+            });
+        }
 
+        function destroy(id, refranec) {
+            // admin/contract-type/{contract_type}
+            axios.delete('/admin/contract-type/' + id)
+                .then(function(response) {
+                    // handle success
+                    console.log(response);
+                    refranec.closest('tr').remove();
+                    location.reload();
+                    showDeletingResult(response.data);
+                })
+                .catch(function(error) {
+                    // handle error
+                    console.log(error);
+                    showDeletingResult(error.response.data);
+                })
+                .then(function() {
+                    // always executed
+                });
+        }
+
+        function showDeletingResult(data) {
+            Swal.fire({
+                icon: data.icon,
+                title: data.title,
+                text: data.text,
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+    </script>
 @endsection

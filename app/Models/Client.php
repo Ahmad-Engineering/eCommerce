@@ -16,4 +16,8 @@ class Client extends Model
     public function admins () {
         return $this->belongsToMany(Admin::class);
     }
+
+    public function contracts () {
+        return $this->hasMany(Contract::class, 'client_id', 'id');
+    }
 }

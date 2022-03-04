@@ -85,6 +85,9 @@ class ContractTypeController extends Controller
     public function edit(ContractType $contractType)
     {
         //
+        return response()->view('ecommerce.contract.edit-contract-type', [
+            'contractType' => $contractType,
+        ]);
     }
 
     /**
@@ -96,7 +99,24 @@ class ContractTypeController extends Controller
      */
     public function update(Request $request, ContractType $contractType)
     {
+        $validator = Validator($request->all(), [
+            'type' => 'required|string|min:3|max:30',
+            'status' => 'required|string|in:active,pending'
+        ]);
         //
+        if (!$validator->fails()) {
+            $contractType->type = $request->get('type');
+            $contractType->status = $request->get('status') == 'active' ? '1' : '0';
+            $isUpdated = $contractType->save();
+
+            return response()->json([
+                'message' => $isUpdated ? 'Contract type updated successfully' : 'Faild to update contract type',
+            ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        }else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -108,5 +128,18 @@ class ContractTypeController extends Controller
     public function destroy(ContractType $contractType)
     {
         //
+        if ($contractType->delete()) {
+            return response()->json([
+                'icon' => 'success',
+                'title' => 'Deleted',
+                'text' => 'Contract type successfully deleted',
+            ], Response::HTTP_OK);
+        }else {
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'Faild',
+                'text' => 'Faild to delete contract type',
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

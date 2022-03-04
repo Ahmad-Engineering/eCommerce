@@ -13,4 +13,8 @@ class ContractType extends Model
     {
         return $this->belongsTo(Admin::class, 'admin_id', 'id');
     }
+
+    public function contracts () {
+        return $this->hasMany(Contract::class, 'contract_type_id', 'id');
+    }
 }

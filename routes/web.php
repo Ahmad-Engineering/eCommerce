@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientChangePasswordController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientSocialController;
+use App\Http\Controllers\ContractController;
 use App\Http\Controllers\ContractTypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,6 +50,11 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     // Resource
     Route::resource('contract-type', ContractTypeController::class);
     // -- End Contract Type Routes --
+
+    // -- Begin Contract Routes --
+    // Resource
+    Route::resource('contract', ContractController::class);
+    // -- End Contract Routes --
 
     // Dashboard Route
     Route::get('/', function () {
