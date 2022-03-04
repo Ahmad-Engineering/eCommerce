@@ -91,7 +91,7 @@
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="feather feather-circle">
                         <circle cx="12" cy="12" r="10"></circle>
-                    </svg><span class="menu-item text-truncate" data-i18n="List">List</span></a>
+                    </svg><span class="menu-item text-truncate" data-i18n="List">Contract Types</span></a>
             </li>
             <li><a class="d-flex align-items-center" href="{{ route('contract-type.create') }}"><svg
                         xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -106,6 +106,13 @@
                         class="feather feather-circle">
                         <circle cx="12" cy="12" r="10"></circle>
                     </svg><span class="menu-item text-truncate" data-i18n="List">Make Contract</span></a>
+            </li>
+            <li><a class="d-flex align-items-center" href="{{route('contract.index')}}"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-circle">
+                        <circle cx="12" cy="12" r="10"></circle>
+                    </svg><span class="menu-item text-truncate" data-i18n="List">Contracts</span></a>
             </li>
         </ul>
     </li>
@@ -123,14 +130,14 @@
                 <circle cx="12" cy="7" r="4"></circle>
             </svg><span class="menu-title text-truncate" data-i18n="User">Payments</span></a>
         <ul class="menu-content">
-            <li><a class="d-flex align-items-center" href="{{route('payment-method.index')}}"><svg
+            <li><a class="d-flex align-items-center" href="{{ route('payment-method.index') }}"><svg
                         xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="feather feather-circle">
                         <circle cx="12" cy="12" r="10"></circle>
                     </svg><span class="menu-item text-truncate" data-i18n="List">methods</span></a>
             </li>
-            <li><a class="d-flex align-items-center" href="{{route('payment-method.create')}}"><svg
+            <li><a class="d-flex align-items-center" href="{{ route('payment-method.create') }}"><svg
                         xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="feather feather-circle">

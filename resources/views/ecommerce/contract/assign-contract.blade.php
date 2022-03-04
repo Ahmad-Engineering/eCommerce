@@ -59,7 +59,7 @@
                             <div class="col-xl-4 col-md-6 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="tax_no">Tax No.</label>
-                                    <input type="text" class="form-control" id="tax_no" value="%1" readonly>
+                                    <input type="text" class="form-control" id="tax_no" value="%0.5" readonly>
                                 </div>
                             </div>
                             <div class="col-xl-4 col-md-6 col-12">

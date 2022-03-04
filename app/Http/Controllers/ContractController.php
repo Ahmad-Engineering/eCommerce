@@ -19,6 +19,12 @@ class ContractController extends Controller
     public function index()
     {
         //
+        $contracts = Contract::with('client')
+        ->where('admin_id', auth('admin')->user()->id)
+        ->get();
+        return response()->view('ecommerce.contract.my-contracts', [
+            'contracts' => $contracts,
+        ]);
     }
 
     /**
@@ -72,7 +78,7 @@ class ContractController extends Controller
             $contract->client_id = $request->get('client_id');
             $contract->admin_id = auth('admin')->user()->id;
             $contract->price = $request->get('price');
-            $contract->tax_no = $request->get('price') / 100;
+            $contract->tax_no = $request->get('price') / 200;
             $contract->contract_type_id = $request->get('contract_type_id');
             $contract->type = $contractType->type;
             $isCreated = $contract->save();
