@@ -92,8 +92,7 @@
                                                     </svg>
                                                     <span>Edit</span>
                                                 </a>
-                                                <a class="dropdown-item" href="#" id="Link"
-                                                    onclick="confirmDestroy({{ $contract->id }}, this)">
+                                                <a class="dropdown-item" href="#" id="Link" onclick="confirmDestroy({{$contract->id}}, this)">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -119,4 +118,55 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    {{-- Delete Contract --}}
+    <script>
+        function confirmDestroy(id, refranec) {
+            Swal.fire({
+                title: 'You\'re close to delete client, are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    destroy(id, refranec);
+                }
+            });
+        }
+
+        function destroy(id, refranec) {
+            // admin/contract/{contract}
+            axios.delete('/admin/contract/' + id)
+                .then(function(response) {
+                    // handle success
+                    console.log(response);
+                    refranec.closest('tr').remove();
+                    location.reload();
+                    showDeletingResult(response.data);
+                })
+                .catch(function(error) {
+                    // handle error
+                    console.log(error);
+                    showDeletingResult(error.response.data);
+                })
+                .then(function() {
+                    // always executed
+                });
+        }
+
+        function showDeletingResult(data) {
+            Swal.fire({
+                icon: data.icon,
+                title: data.title,
+                text: data.text,
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+    </script>
 @endsection

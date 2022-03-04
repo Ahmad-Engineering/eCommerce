@@ -137,5 +137,18 @@ class ContractController extends Controller
     public function destroy(Contract $contract)
     {
         //
+        if ($contract->delete()) {
+            return response()->json([
+                'icon' => 'success',
+                'title' => 'Deleted',
+                'text' => 'Contract deleted successfully',
+            ], Response::HTTP_OK);
+        }else {
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'Faild',
+                'text' => 'Faild to delete contract',
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 }
