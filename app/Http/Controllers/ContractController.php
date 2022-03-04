@@ -20,10 +20,30 @@ class ContractController extends Controller
     {
         //
         $contracts = Contract::with('client')
-        ->where('admin_id', auth('admin')->user()->id)
-        ->get();
+            ->where('admin_id', auth('admin')->user()->id)
+            ->get();
+
+        // Gathering Information For Admin Statistices
+        $contract_no = Contract::where([
+            ['admin_id', auth('admin')->user()->id],
+            ['status', 1],
+        ])->count();
+        $client_no = Client::whereHas('admins', function ($query) {
+            $query->where([
+                ['admin_id', auth('admin')->user()->id],
+            ]);
+        })
+        ->where('status', 1)
+        ->count();
+        $admin_price = Contract::where([
+            ['admin_id', auth('admin')->user()->id],
+            ['status', 1],
+        ])->sum('price');
         return response()->view('ecommerce.contract.my-contracts', [
             'contracts' => $contracts,
+            'contract_no' => $contract_no,
+            'client_no' => $client_no,
+            'admin_price' => $admin_price,
         ]);
     }
 
@@ -36,13 +56,13 @@ class ContractController extends Controller
     {
         //
         $clients = Client::select(['id', 'name'])
-        ->whereHas('admins', function ($query) {
-            $query->where('admin_id', auth('admin')->user()->id);
-        })
-        ->get();
+            ->whereHas('admins', function ($query) {
+                $query->where('admin_id', auth('admin')->user()->id);
+            })
+            ->get();
         $contract_types = ContractType::select(['id', 'type'])
-        ->where('admin_id', auth('admin')->user()->id)
-        ->get();
+            ->where('admin_id', auth('admin')->user()->id)
+            ->get();
         return response()->view('ecommerce.contract.assign-contract', [
             'clients' => $clients,
             'contract_types' => $contract_types,
@@ -67,7 +87,7 @@ class ContractController extends Controller
             'contract_type_id' => 'required|integer|exists:contract_types,id',
         ]);
         //
-        if(!$validator->fails()) {
+        if (!$validator->fails()) {
             $contractType = ContractType::select(['type'])->where('id', $request->get('contract_type_id'))->first();
 
             $contract = new Contract();
@@ -86,8 +106,7 @@ class ContractController extends Controller
             return response()->json([
                 'message' => $isCreated ? 'Contracted Successfully' : 'Faild to save contract',
             ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
-
-        }else {
+        } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first()
             ], Response::HTTP_BAD_REQUEST);
@@ -115,13 +134,13 @@ class ContractController extends Controller
     {
         //
         $clients = Client::select(['id', 'name'])
-        ->whereHas('admins', function ($query) {
-            $query->where('admin_id', auth('admin')->user()->id);
-        })
-        ->get();
+            ->whereHas('admins', function ($query) {
+                $query->where('admin_id', auth('admin')->user()->id);
+            })
+            ->get();
         $contract_types = ContractType::select(['id', 'type'])
-        ->where('admin_id', auth('admin')->user()->id)
-        ->get();
+            ->where('admin_id', auth('admin')->user()->id)
+            ->get();
         return response()->view('ecommerce.contract.edit-assigned-contract', [
             'contract' => $contract,
             'clients' => $clients,
@@ -148,7 +167,7 @@ class ContractController extends Controller
             'contract_type_id' => 'required|integer|exists:contract_types,id',
         ]);
         //
-        if(!$validator->fails()) {
+        if (!$validator->fails()) {
             $contractType = ContractType::select(['type'])->where('id', $request->get('contract_type_id'))->first();
 
             $contract->title = $request->get('title');
@@ -166,8 +185,7 @@ class ContractController extends Controller
             return response()->json([
                 'message' => $isUpdated ? 'Contract updated successfully' : 'Faild to update contract',
             ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
-
-        }else {
+        } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first()
             ], Response::HTTP_BAD_REQUEST);
@@ -189,7 +207,7 @@ class ContractController extends Controller
                 'title' => 'Deleted',
                 'text' => 'Contract deleted successfully',
             ], Response::HTTP_OK);
-        }else {
+        } else {
             return response()->json([
                 'icon' => 'error',
                 'title' => 'Faild',
