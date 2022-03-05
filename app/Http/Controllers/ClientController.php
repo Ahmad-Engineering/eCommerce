@@ -63,6 +63,12 @@ class ClientController extends Controller
             'status' => 'required|string|in:active,blocked'
         ]);
         //
+        $client = Client::where('email', $request->get('email'))->first();
+        if (!is_null($client))
+            return response()->json([
+                'message' => 'This email is already used, please use another client email.',
+            ], Response::HTTP_BAD_REQUEST);
+
         if (!$validator->fails()) {
             $client = new Client();
             $client->name = $request->get('name');

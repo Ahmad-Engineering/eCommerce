@@ -58,7 +58,6 @@
                     // handle success
                     console.log(response);
                     toastr.success(response.data.message);
-                    document.getElementById('create-form').reset();
                     location.reload();
                 })
                 .catch(function(error) {
