@@ -199,7 +199,10 @@ class ClientController extends Controller
             $client = Client::whereHas('admins', function ($query) {
                 $query->where('admin_id', auth('admin')->user()->id);
             })
-            ->where('id', $id)
+            ->where([
+                ['id', $id],
+                ['status', '0']
+            ])
             ->first();
 
             if (is_null($client))
@@ -227,7 +230,10 @@ class ClientController extends Controller
             $client = Client::whereHas('admins', function ($query) {
                 $query->where('admin_id', auth('admin')->user()->id);
             })
-            ->where('id', $id)
+            ->where([
+                ['id', $id],
+                ['status', '1']
+            ])
             ->first();
 
             if (is_null($client))

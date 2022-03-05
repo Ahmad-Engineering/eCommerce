@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminAccountSettingsController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientChangePasswordController;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 
 // Authentaction Routes
-Route::prefix('auth')->group(function () {
+Route::prefix('auth')->middleware('guest:admin')->group(function () {
     Route::get('{guard}/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('login', [AuthController::class, 'login']);
 });
@@ -51,6 +52,12 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     // -- Begin Admin Routes --
     // Resource
     Route::resource('cpanel', AdminController::class);
+    // Admin Account Settings
+    Route::prefix('admin-settings')->group(function () {
+        // Change Admin Password
+        Route::get('change-password', [AdminAccountSettingsController::class, 'showChangePassword'])->name('change.admin.password');
+        Route::put('change-password', [AdminAccountSettingsController::class, 'changePassword']);
+    });
     // -- End Clients Routes --
 
     // -- Begin Contract Type Routes --
