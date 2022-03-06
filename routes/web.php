@@ -9,6 +9,8 @@ use App\Http\Controllers\ClientSocialController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\ContractTypeController;
 use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\PDFController;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,6 +67,13 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     Route::resource('contract-type', ContractTypeController::class);
     // -- End Contract Type Routes --
 
+    // -- Begin PDF Routes --
+    // Download Contract
+    Route::get('admin-client-contract/{id}/client', [PDFController::class, 'downloadContractAsPDF'])->name('admin.client.contract.as.pdf');
+    // Download Admin Clients
+    Route::get('client-pdf', [PDFController::class, 'adminCLientsAsPDF'])->name('admin.clients.as.pdf');
+    // -- End PDF Routes --
+
     // -- Begin Contract Routes --
     // Resource
     Route::resource('contract', ContractController::class);
@@ -82,6 +91,7 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
 
     // Logout Route
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
 });
 
 Route::fallback(function () {
@@ -89,6 +99,8 @@ Route::fallback(function () {
 });
 
 
+
+// Test Route
 Route::get('test', function () {
     return view('ecommerce.contract.form-date-time-picker');
 });
