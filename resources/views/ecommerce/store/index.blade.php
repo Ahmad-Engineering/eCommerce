@@ -113,52 +113,67 @@
 
 
 @section('scripts')
-        {{-- Delete Store --}}
-        <script>
-            function confirmDestroy(id, refranec) {
-                Swal.fire({
-                    title: 'You\'re close to delete client, are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        destroy(id, refranec);
-                    }
-                });
-            }
+    {{-- Delete Store --}}
+    <script>
+        function confirmDestroy(id, refranec) {
+            Swal.fire({
+                title: 'You\'re close to delete client, are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    destroy(id, refranec);
+                }
+            });
+        }
 
-            function destroy(id, refranec) {
-                // admin/store/{store}
-                axios.delete('/admin/store/' + id)
-                    .then(function(response) {
-                        // handle success
-                        console.log(response);
-                        refranec.closest('tr').remove();
-                        location.reload();
-                        showDeletingResult(response.data);
-                    })
-                    .catch(function(error) {
-                        // handle error
-                        console.log(error);
-                        showDeletingResult(error.response.data);
-                    })
-                    .then(function() {
-                        // always executed
-                    });
-            }
-
-            function showDeletingResult(data) {
-                Swal.fire({
-                    icon: data.icon,
-                    title: data.title,
-                    text: data.text,
-                    showConfirmButton: false,
-                    timer: 2000
+        function destroy(id, refranec) {
+            // admin/store/{store}
+            axios.delete('/admin/store/' + id)
+                .then(function(response) {
+                    // handle success
+                    console.log(response);
+                    refranec.closest('tr').remove();
+                    location.reload();
+                    showDeletingResult(response.data);
+                })
+                .catch(function(error) {
+                    // handle error
+                    console.log(error);
+                    showDeletingResult(error.response.data);
+                })
+                .then(function() {
+                    // always executed
                 });
-            }
-        </script>
+        }
+
+        function showDeletingResult(data) {
+            Swal.fire({
+                icon: data.icon,
+                title: data.title,
+                text: data.text,
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+
+        function generateStoresPDF() {
+            axios.get('/admin/stores-pdf')
+                .then(function(response) {
+                    // handle success
+                    console.log(response);
+                })
+                .catch(function(error) {
+                    // handle error
+                    console.log(error);
+                })
+                .then(function() {
+                    // always executed
+                });
+        }
+    </script>
 @endsection

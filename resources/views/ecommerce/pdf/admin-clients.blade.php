@@ -106,7 +106,9 @@
                 @endforeach
             </tbody>
         </table>
-
+        {{
+            Date::now()
+        }}
     </div>
 
 </body>

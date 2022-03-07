@@ -73,6 +73,8 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     Route::get('admin-client-contract/{id}/client', [PDFController::class, 'downloadContractAsPDF'])->name('admin.client.contract.as.pdf');
     // Download Admin Clients
     Route::get('client-pdf', [PDFController::class, 'adminCLientsAsPDF'])->name('admin.clients.as.pdf');
+    // Download Stores PDF
+    Route::get('stores-pdf', [PDFController::class, 'adminStoresAsPDF'])->name('admin.stores.as.pdf');
     // -- End PDF Routes --
 
     // -- Begin Contract Routes --
