@@ -17,6 +17,10 @@ class StoreController extends Controller
     public function index()
     {
         //
+        $stores = Store::where('admin_id', auth('admin')->user()->id)->get();
+        return response()->view('ecommerce.store.index', [
+            'stores' => $stores,
+        ]);
     }
 
     /**
@@ -51,6 +55,7 @@ class StoreController extends Controller
             $store->amount = $request->get('goods_amount');
             $store->price = $request->get('piece_price');
             $store->offer = $request->get('special_offer');
+            $store->price_after_offer = ($request->get('piece_price') - ($request->get('piece_price') / 100) * $request->get('special_offer'));
             $store->admin_id = auth('admin')->user()->id;
             $isCreated = $store->save();
 
@@ -85,6 +90,12 @@ class StoreController extends Controller
     public function edit(Store $store)
     {
         //
+        if ($store->admin_id != auth('admin')->user()->id) {
+            return redirect()->route('store.index');
+        }
+        return response()->view('ecommerce.store.edit', [
+            'store' => $store,
+        ]);
     }
 
     /**
@@ -96,7 +107,30 @@ class StoreController extends Controller
      */
     public function update(Request $request, Store $store)
     {
+        $validator = Validator($request->all(), [
+            'store_name' => 'required|string|min:3|max:50',
+            'goods_amount' => 'required|integer|min:0',
+            'piece_price' => 'required|numeric|min:0',
+            'special_offer' => 'required|numeric|min:0',
+        ]);
         //
+        if (!$validator->fails()) {
+            $store->name = $request->get('store_name');
+            $store->amount = $request->get('goods_amount');
+            $store->price = $request->get('piece_price');
+            $store->offer = $request->get('special_offer');
+            $store->price_after_offer = ($request->get('piece_price') - ($request->get('piece_price') / 100) * $request->get('special_offer'));
+            $isUpdated = $store->save();
+
+            return response()->json([
+                'message' => $isUpdated ? 'Store updated successfully' : 'Faild to update store',
+            ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+
+        }else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -108,5 +142,18 @@ class StoreController extends Controller
     public function destroy(Store $store)
     {
         //
+        if ($store->delete()) {
+            return response()->json([
+                'icon' => 'success',
+                'title' => 'Deleted',
+                'text' => 'Store deleted successfully',
+            ], Response::HTTP_OK);
+        }else {
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'Faild',
+                'text' => 'Faild to delete store',
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 }
