@@ -388,7 +388,7 @@
                                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                                     <circle cx="12" cy="7" r="4"></circle>
                                                 </svg>
-                                                <span class="align-middle">Personal Information</span>
+                                                <span class="align-middle">{{$client->name}} Personal Information</span>
                                             </h4>
                                         </div>
                                         <div class="col-lg-4 col-md-6">
@@ -415,8 +415,8 @@
                                         </div>
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-1">
-                                                <label class="form-label" for="languages">Languages</label>
-                                                <select id="languages" class="form-select">
+                                                <label class="form-label" for="language">Languages</label>
+                                                <select id="language" class="form-select">
                                                     <option value="English">English</option>
                                                     <option value="Spanish">Spanish</option>
                                                     <option value="French" selected="">French</option>
@@ -445,18 +445,18 @@
                                             <div class="mb-1">
                                                 <label class="d-block form-label mb-1">Contact Options</label>
                                                 <div class="form-check form-check-inline">
-                                                    <input type="checkbox" class="form-check-input" id="email-cb"
+                                                    <input type="checkbox" class="form-check-input" id="email_contact"
                                                         checked="">
-                                                    <label class="form-check-label" for="email-cb">Email</label>
+                                                    <label class="form-check-label" for="email_contact">Email</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input type="checkbox" class="form-check-input" id="message"
+                                                    <input type="checkbox" class="form-check-input" id="chat_contact"
                                                         checked="">
-                                                    <label class="form-check-label" for="message">Message</label>
+                                                    <label class="form-check-label" for="chat_contact">Message</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input type="checkbox" class="form-check-input" id="phone">
-                                                    <label class="form-check-label" for="phone">Phone</label>
+                                                    <input type="checkbox" class="form-check-input" id="phone_contact">
+                                                    <label class="form-check-label" for="phone_contact">Phone</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -474,15 +474,15 @@
                                         </div>
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-1">
-                                                <label class="form-label" for="address-1">Address Line 1</label>
-                                                <input id="address-1" type="text" class="form-control"
-                                                    value="A-65, Belvedere Streets" name="address">
+                                                <label class="form-label" for="address_one">Address Line 1</label>
+                                                <input id="address_one" type="text" class="form-control"
+                                                    value="" name="address_one">
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-1">
-                                                <label class="form-label" for="address-2">Address Line 2</label>
-                                                <input id="address-2" type="text" class="form-control"
+                                                <label class="form-label" for="address_two">Address Line 2</label>
+                                                <input id="address_two" type="text" class="form-control"
                                                     placeholder="T-78, Groove Street">
                                             </div>
                                         </div>
@@ -496,7 +496,7 @@
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-1">
                                                 <label class="form-label" for="city">City</label>
-                                                <input id="city" type="text" class="form-control" value="New York"
+                                                <input id="city" type="text" class="form-control" value=""
                                                     name="city">
                                             </div>
                                         </div>
@@ -515,7 +515,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 d-flex flex-sm-row flex-column mt-2">
-                                            <button type="submit"
+                                            <button type="button" onclick="addClientInfos({{$client->id}})"
                                                 class="btn btn-primary mb-1 mb-sm-0 me-0 me-sm-1 waves-effect waves-float waves-light">Save
                                                 Changes</button>
                                             <button type="reset"
@@ -743,6 +743,41 @@
                     console.log(response);
                     toastr.success(response.data.message);
                     document.getElementById('create-form').reset();
+                    location.reload();
+                })
+                .catch(function(error) {
+                    // handle error
+                    console.log(error);
+                    toastr.error(error.response.data.message)
+                })
+                .then(function() {
+                    // always executed
+                });
+        }
+
+        function addClientInfos(id) {
+            // admin/client-social
+            clientInfo = new FormData();
+            clientInfo.append('age', document.getElementById('age').value);
+            clientInfo.append('mobile', document.getElementById('mobile').value);
+            clientInfo.append('website', document.getElementById('website').value);
+            clientInfo.append('language', document.getElementById('language').value);
+            clientInfo.append('gender', document.getElementById('male').checked == 1 ? 'M' : 'F');
+            clientInfo.append('email_contact', document.getElementById('email_contact').checked ? 1 : 0);
+            clientInfo.append('chat_contact', document.getElementById('chat_contact').checked ? 1 : 0);
+            clientInfo.append('phone_contact', document.getElementById('phone_contact').checked ? 1 : 0);
+            clientInfo.append('address_one', document.getElementById('address_one').value);
+            clientInfo.append('address_two', document.getElementById('address_two').value);
+            clientInfo.append('postcode', document.getElementById('postcode').value);
+            clientInfo.append('city', document.getElementById('city').value);
+            clientInfo.append('state', document.getElementById('state').value);
+            clientInfo.append('country', document.getElementById('country').value);
+            clientInfo.append('client_id', id);
+            axios.post('/admin/client-info', clientInfo)
+                .then(function(response) {
+                    // handle success
+                    console.log(response);
+                    toastr.success(response.data.message);
                     location.reload();
                 })
                 .catch(function(error) {

@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientChangePasswordController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ClientInfoController;
 use App\Http\Controllers\ClientSocialController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\ContractTypeController;
@@ -50,6 +51,8 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     Route::put('unblock-client/{id}/client', [ClientController::class, 'unblockClient']);
     // Block Client
     Route::put('block-client/{id}/client', [ClientController::class, 'blockClient'])->name('block.client');
+    // Client Informations
+    Route::resource('client-info', ClientInfoController::class);
     // -- End Clients Routes --
 
     // -- Begin Admin Routes --
