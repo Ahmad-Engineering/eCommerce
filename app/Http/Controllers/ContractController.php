@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Contract;
 use App\Models\ContractType;
+use App\Models\Store;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,8 +34,8 @@ class ContractController extends Controller
                 ['admin_id', auth('admin')->user()->id],
             ]);
         })
-        ->where('status', 1)
-        ->count();
+            ->where('status', 1)
+            ->count();
         $admin_price = Contract::where([
             ['admin_id', auth('admin')->user()->id],
             ['status', 1],
@@ -63,9 +64,11 @@ class ContractController extends Controller
         $contract_types = ContractType::select(['id', 'type'])
             ->where('admin_id', auth('admin')->user()->id)
             ->get();
+        $stores = Store::where('admin_id', auth('admin')->user()->id)->get();
         return response()->view('ecommerce.contract.assign-contract', [
             'clients' => $clients,
             'contract_types' => $contract_types,
+            'stores' => $stores,
         ]);
     }
 
@@ -85,27 +88,48 @@ class ContractController extends Controller
             'to_date' => 'required|string',
             'client_id' => 'required|integer|exists:clients,id',
             'contract_type_id' => 'required|integer|exists:contract_types,id',
+            'store' => 'required|integer|exists:stores,id',
+            'peice_no' => 'required|integer|min:0',
         ]);
         //
         if (!$validator->fails()) {
-            $contractType = ContractType::select(['type'])->where('id', $request->get('contract_type_id'))->first();
 
-            $contract = new Contract();
-            $contract->title = $request->get('title');
-            $contract->status = $request->get('status') == 'active' ? '1' : '0';
-            $contract->from_date = $request->get('from_date');
-            $contract->to_date = $request->get('to_date');
-            $contract->client_id = $request->get('client_id');
-            $contract->admin_id = auth('admin')->user()->id;
-            $contract->price = $request->get('price');
-            $contract->tax_no = $request->get('price') / 200;
-            $contract->contract_type_id = $request->get('contract_type_id');
-            $contract->type = $contractType->type;
-            $isCreated = $contract->save();
+            $store = Store::where([
+                ['admin_id', auth('admin')->user()->id],
+                ['id', $request->get('store')]
+            ])->first();
 
-            return response()->json([
-                'message' => $isCreated ? 'Contracted Successfully' : 'Faild to save contract',
-            ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+            if ($store->amount < $request->get('peice_no'))
+                return response()->json([
+                    'message' => 'Not enogh goods in your ' . $store->name . ' store.',
+                ], Response::HTTP_BAD_REQUEST);
+
+            if (!is_null($store) && $store->amount >= $request->get('peice_no')) {
+                $contractType = ContractType::select(['type'])->where('id', $request->get('contract_type_id'))->first();
+
+                $contract = new Contract();
+                $contract->title = $request->get('title');
+                $contract->status = $request->get('status') == 'active' ? '1' : '0';
+                $contract->from_date = $request->get('from_date');
+                $contract->to_date = $request->get('to_date');
+                $contract->client_id = $request->get('client_id');
+                $contract->admin_id = auth('admin')->user()->id;
+                $contract->price = $request->get('price') - $request->get('tax_no');
+                $contract->price_after_offer = ($request->get('price') - ($request->get('price') / 100) * $store->offer);
+                $contract->tax_no = $request->get('price') / 200;
+                $contract->contract_type_id = $request->get('contract_type_id');
+                $contract->type = $contractType->type;
+                $isCreated = $contract->save();
+
+                $store->amount = $store->amount - $request->get('peice_no');
+
+                return response()->json([
+                    'message' => $isCreated ? 'Contracted Successfully' : 'Faild to save contract',
+                ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+            }else {
+                return redirect()->route('contract.create');
+            }
+
         } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first()

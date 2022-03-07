@@ -53,7 +53,8 @@
                             <div class="col-xl-4 col-md-6 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="price">Price</label>
-                                    <input type="number" class="form-control" id="price" placeholder="Enter Contract Price">
+                                    <input type="number" class="form-control" id="price"
+                                        placeholder="Enter Contract Price">
                                 </div>
                             </div>
                             <div class="col-xl-4 col-md-6 col-12">
@@ -107,12 +108,30 @@
                                 </div>
                             </div>
                             <div class="col-xl-4 col-md-6 col-12">
+                                <div class="mb-1">
+                                    <label class="form-label" for="store">From Store</label>
+                                    <select class="form-select" id="store">
+                                        @foreach ($stores as $store)
+                                            <option value="{{ $store->id }}">{{ $store->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6 col-12">
+                                <div class="mb-1">
+                                    <label class="form-label" for="peice_no">Peice Number</label>
+                                    <input type="number" class="form-control" id="peice_no"
+                                        placeholder="Enter Piece Number">
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6 col-12">
                                 <label class="form-label" for="disabledInput">Contract Manager</label>
                                 <p class="form-control-static" id="staticInput">{{ auth('admin')->user()->name }}</p>
                             </div>
                             <div class="col-xl-4 col-md-6 col-12">
-                                <button class="btn btn-primary waves-effect waves-float waves-light"
-                                    type="button" onclick="store()">Contracting</button>
+                                <button class="btn btn-primary waves-effect waves-float waves-light" type="button"
+                                    onclick="store()">Contracting</button>
                             </div>
                         </div>
                     </div>
@@ -168,6 +187,8 @@
                     to_date: document.getElementById('to_date').value,
                     client_id: document.getElementById('client').value,
                     contract_type_id: document.getElementById('contract_type').value,
+                    store: document.getElementById('store').value,
+                    peice_no: document.getElementById('peice_no').value,
                 })
                 .then(function(response) {
                     // handle success
