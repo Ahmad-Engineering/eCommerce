@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Store;
+use Dotenv\Validator;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class StoreController extends Controller
 {
@@ -25,6 +27,7 @@ class StoreController extends Controller
     public function create()
     {
         //
+        return response()->view('ecommerce.store.create');
     }
 
     /**
@@ -35,7 +38,31 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator($request->all(), [
+            'store_name' => 'required|string|min:3|max:50',
+            'goods_amount' => 'required|integer|min:0',
+            'piece_price' => 'required|numeric|min:0',
+            'special_offer' => 'required|numeric|min:0',
+        ]);
         //
+        if (!$validator->fails()) {
+            $store = new Store();
+            $store->name = $request->get('store_name');
+            $store->amount = $request->get('goods_amount');
+            $store->price = $request->get('piece_price');
+            $store->offer = $request->get('special_offer');
+            $store->admin_id = auth('admin')->user()->id;
+            $isCreated = $store->save();
+
+            return response()->json([
+                'message' => $isCreated ? 'Store created successfully' : 'Faild to create new store',
+            ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+
+        }else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
