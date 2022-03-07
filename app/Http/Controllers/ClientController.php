@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\AdminClients;
 use App\Models\Client;
 use App\Models\ClientSocial;
+use App\Models\Contract;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -171,6 +172,13 @@ class ClientController extends Controller
     {
         //
         if ($client->delete()) {
+
+            // Remove Client Information From System
+            Contract::where([
+                ['client_id', $client->id],
+                ['admin_id', auth('admin')->user()->id]
+            ])->delete();
+
             return response()->json([
                 'icon' => 'success',
                 'title' => 'Deleted',

@@ -27,4 +27,8 @@ class Admin extends Authenticatable
     public function paymentMethods () {
         return $this->hasMany(PaymentMethod::class, 'admin_id', 'id');
     }
+
+    public function stores () {
+        return $this->hasMany(Store::class, 'admin_id', 'id');
+    }
 }
