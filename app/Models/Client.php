@@ -9,15 +9,23 @@ class Client extends Model
 {
     use HasFactory;
 
-    public function clientSocial () {
+    public function clientSocial()
+    {
         return $this->hasOne(ClientSocial::class, 'client_id', 'id');
     }
 
-    public function admins () {
+    public function admins()
+    {
         return $this->belongsToMany(Admin::class);
     }
 
-    public function contracts () {
+    public function contracts()
+    {
         return $this->hasMany(Contract::class, 'client_id', 'id');
+    }
+
+    public function clientInfo()
+    {
+        return $this->hasOne(ClientInfo::class, 'client_id', 'id');
     }
 }

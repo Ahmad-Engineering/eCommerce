@@ -393,10 +393,9 @@
                                         </div>
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-1">
-                                                <label class="form-label" for="birth">Birth date</label>
-                                                <input id="birth" type="text"
-                                                    class="form-control birthdate-picker flatpickr-input" name="dob"
-                                                    placeholder="YYYY-MM-DD" readonly="readonly">
+                                                <label class="form-label" for="age">Age</label>
+                                                <input id="age" type="number" class="form-control"
+                                                    name="age">
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-md-6">
@@ -547,9 +546,7 @@
                                                     </svg>
                                                 </span>
                                                 <input id="twitter" type="text" class="form-control"
-                                                    @if (!is_null($client->clientSocial))
-                                                        value="{{ $client->clientSocial->twitter}}"
-                                                    @endif
+                                                    @if (!is_null($client->clientSocial)) value="{{ $client->clientSocial->twitter }}" @endif
                                                     placeholder="https://www.twitter.com/" aria-describedby="basic-addon3">
                                             </div>
                                         </div>
@@ -567,9 +564,7 @@
                                                     </svg>
                                                 </span>
                                                 <input id="facebook" type="text" class="form-control"
-                                                @if (!is_null($client->clientSocial))
-                                                value="{{ $client->clientSocial->facebook}}"
-                                            @endif
+                                                    @if (!is_null($client->clientSocial)) value="{{ $client->clientSocial->facebook }}" @endif
                                                     placeholder="https://www.facebook.com/" aria-describedby="basic-addon4">
                                             </div>
                                         </div>
@@ -587,9 +582,7 @@
                                                     </svg>
                                                 </span>
                                                 <input id="instagram" type="text" class="form-control"
-                                                @if (!is_null($client->clientSocial))
-                                                value="{{ $client->clientSocial->instagram}}"
-                                            @endif
+                                                    @if (!is_null($client->clientSocial)) value="{{ $client->clientSocial->instagram }}" @endif
                                                     placeholder="https://www.instagram.com/"
                                                     aria-describedby="basic-addon5">
                                             </div>
@@ -608,9 +601,7 @@
                                                     </svg>
                                                 </span>
                                                 <input id="github" type="text" class="form-control"
-                                                @if (!is_null($client->clientSocial))
-                                                value="{{ $client->clientSocial->github}}"
-                                            @endif
+                                                    @if (!is_null($client->clientSocial)) value="{{ $client->clientSocial->github }}" @endif
                                                     placeholder="https://www.github.com/" aria-describedby="basic-addon9">
                                             </div>
                                         </div>
@@ -631,9 +622,7 @@
                                                     </svg>
                                                 </span>
                                                 <input id="codepen" type="text" class="form-control"
-                                                @if (!is_null($client->clientSocial))
-                                                value="{{ $client->clientSocial->codepen}}"
-                                            @endif
+                                                    @if (!is_null($client->clientSocial)) value="{{ $client->clientSocial->codepen }}" @endif
                                                     placeholder="https://www.codepen.com/" aria-describedby="basic-addon12">
                                             </div>
                                         </div>
@@ -672,9 +661,7 @@
                                                     </svg>
                                                 </span>
                                                 <input id="slack" type="text" class="form-control"
-                                                @if (!is_null($client->clientSocial))
-                                                value="{{ $client->clientSocial->slack}}"
-                                            @endif
+                                                    @if (!is_null($client->clientSocial)) value="{{ $client->clientSocial->slack }}" @endif
                                                     placeholder="https://www.slack.com/" aria-describedby="basic-addon11">
                                             </div>
                                         </div>
