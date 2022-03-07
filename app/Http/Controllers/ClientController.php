@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\AdminClients;
 use App\Models\Client;
+use App\Models\ClientInfo;
 use App\Models\ClientSocial;
 use App\Models\Contract;
 use Dotenv\Validator;
@@ -119,10 +120,23 @@ class ClientController extends Controller
     public function edit(Client $client)
     {
         //
+
+        $exists = Client::whereHas('admins', function ($query) use($client) {
+            $query->where([
+                ['admin_id', auth('admin')->user()->id],
+                ['client_id', $client->id]
+            ]);
+        })->exists();
+
+        if (!$exists)
+            return redirect()->route('client.index');
+
         $clientSocial = $client->clientSocial();
+        $clientInfo = $client->clientInfo();
         return response()->view('ecommerce.client.edit', [
             'client' => $client,
             'clientSocial' => $clientSocial,
+            'clientInfo' => $clientInfo,
         ]);
     }
 
@@ -135,6 +149,16 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
+        $exists = Client::whereHas('admins', function ($query) use($client) {
+            $query->where([
+                ['admin_id', auth('admin')->user()->id],
+                ['client_id', $client->id]
+            ]);
+        })->exists();
+
+        if (!$exists)
+            return redirect()->route('client.index');
+
         $validator = Validator($request->all(), [
             'name' => 'required|string|min:3|max:40',
             'phone' => 'required|string|min:9|max:20',
@@ -178,6 +202,11 @@ class ClientController extends Controller
                 ['client_id', $client->id],
                 ['admin_id', auth('admin')->user()->id]
             ])->delete();
+            ClientInfo::where([
+                ['client_id', $client->id],
+                ['admin_id', auth('admin')->user()->id],
+            ])->delete();
+
 
             return response()->json([
                 'icon' => 'success',

@@ -388,20 +388,23 @@
                                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                                     <circle cx="12" cy="7" r="4"></circle>
                                                 </svg>
-                                                <span class="align-middle">{{$client->name}} Personal Information</span>
+                                                <span class="align-middle">{{ $client->name }} Personal
+                                                    Information</span>
                                             </h4>
                                         </div>
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-1">
                                                 <label class="form-label" for="age">Age</label>
                                                 <input id="age" type="number" class="form-control"
+                                                    @if (!is_null($client->clientInfo)) value="{{ $client->clientInfo->age }}" @endif
                                                     name="age">
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-1">
                                                 <label class="form-label" for="mobile">Mobile</label>
-                                                <input id="mobile" type="text" class="form-control" value="+6595895857"
+                                                <input id="mobile" type="text" class="form-control"
+                                                    @if (!is_null($client->clientInfo)) value="{{ $client->clientInfo->mobile }}" @endif
                                                     name="phone">
                                             </div>
                                         </div>
@@ -410,20 +413,49 @@
                                                 <label class="form-label" for="website">Website</label>
                                                 <input id="website" type="text" class="form-control"
                                                     placeholder="Website here..."
-                                                    value="https://rowboat.com/insititious/Angelo" name="website">
+                                                    @if (!is_null($client->clientInfo)) value="{{ $client->clientInfo->website }}" @endif
+                                                    name="website">
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-1">
                                                 <label class="form-label" for="language">Languages</label>
                                                 <select id="language" class="form-select">
-                                                    <option value="English">English</option>
-                                                    <option value="Spanish">Spanish</option>
-                                                    <option value="French" selected="">French</option>
-                                                    <option value="Russian">Russian</option>
-                                                    <option value="German">German</option>
-                                                    <option value="Arabic">Arabic</option>
-                                                    <option value="Sanskrit">Sanskrit</option>
+                                                    <option value="English"
+                                                        @if (!is_null($client->clientInfo)) @if ($client->clientInfo->native_lan == 'English')
+                                                            selected @endif
+                                                        @endif
+                                                        >English</option>
+                                                    <option value="Spanish"
+                                                        @if (!is_null($client->clientInfo)) @if ($client->clientInfo->native_lan == 'Spanish')
+                                                            selected @endif
+                                                        @endif
+                                                        >Spanish</option>
+                                                    <option value="French"
+                                                        @if (!is_null($client->clientInfo)) @if ($client->clientInfo->native_lan == 'French')
+                                                            selected @endif
+                                                        @endif
+                                                        >French</option>
+                                                    <option value="Russian"
+                                                        @if (!is_null($client->clientInfo)) @if ($client->clientInfo->native_lan == 'Russian')
+                                                            selected @endif
+                                                        @endif
+                                                        >Russian</option>
+                                                    <option value="German"
+                                                        @if (!is_null($client->clientInfo)) @if ($client->clientInfo->native_lan == 'German')
+                                                            selected @endif
+                                                        @endif
+                                                        >German</option>
+                                                    <option value="Arabic"
+                                                        @if (!is_null($client->clientInfo)) @if ($client->clientInfo->native_lan == 'Arabic')
+                                                            selected @endif
+                                                        @endif
+                                                        >Arabic</option>
+                                                    <option value="Sanskrit"
+                                                        @if (!is_null($client->clientInfo)) @if ($client->clientInfo->native_lan == 'Sanskrit')
+                                                            selected @endif
+                                                        @endif
+                                                        >Sanskrit</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -431,12 +463,19 @@
                                             <div class="mb-1">
                                                 <label class="d-block form-label mb-1">Gender</label>
                                                 <div class="form-check form-check-inline">
-                                                    <input type="radio" id="male" name="gender" class="form-check-input">
+                                                    <input type="radio" id="male" name="gender" class="form-check-input"
+                                                        @if (!is_null($client->clientInfo)) @if ($client->clientInfo->gender == 'M')
+                                                            checked @endif
+                                                        @endif
+                                                    >
                                                     <label class="form-check-label" for="male">Male</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input type="radio" id="female" name="gender" class="form-check-input"
-                                                        checked="">
+                                                        @if (!is_null($client->clientInfo)) @if ($client->clientInfo->gender == 'F')
+                                                            checked @endif
+                                                        @endif
+                                                    >
                                                     <label class="form-check-label" for="female">Female</label>
                                                 </div>
                                             </div>
@@ -446,16 +485,26 @@
                                                 <label class="d-block form-label mb-1">Contact Options</label>
                                                 <div class="form-check form-check-inline">
                                                     <input type="checkbox" class="form-check-input" id="email_contact"
-                                                        checked="">
+                                                        @if (!is_null($client->clientInfo)) @if ($client->clientInfo->email_contact)
+                                                            checked @endif
+                                                        @endif
+                                                    >
                                                     <label class="form-check-label" for="email_contact">Email</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input type="checkbox" class="form-check-input" id="chat_contact"
-                                                        checked="">
+                                                        @if (!is_null($client->clientInfo)) @if ($client->clientInfo->chat_contact)
+                                                            checked @endif
+                                                        @endif
+                                                    >
                                                     <label class="form-check-label" for="chat_contact">Message</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input type="checkbox" class="form-check-input" id="phone_contact">
+                                                    <input type="checkbox" class="form-check-input" id="phone_contact"
+                                                        @if (!is_null($client->clientInfo)) @if ($client->clientInfo->phone_contact)
+                                                            checked @endif
+                                                        @endif
+                                                    >
                                                     <label class="form-check-label" for="phone_contact">Phone</label>
                                                 </div>
                                             </div>
@@ -476,13 +525,15 @@
                                             <div class="mb-1">
                                                 <label class="form-label" for="address_one">Address Line 1</label>
                                                 <input id="address_one" type="text" class="form-control"
-                                                    value="" name="address_one">
+                                                    @if (!is_null($client->clientInfo)) value="{{ $client->clientInfo->first_address }}" @endif
+                                                    name="address_one">
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-1">
                                                 <label class="form-label" for="address_two">Address Line 2</label>
                                                 <input id="address_two" type="text" class="form-control"
+                                                    @if (!is_null($client->clientInfo)) value="{{ $client->clientInfo->second_address }}" @endif
                                                     placeholder="T-78, Groove Street">
                                             </div>
                                         </div>
@@ -490,13 +541,15 @@
                                             <div class="mb-1">
                                                 <label class="form-label" for="postcode">Postcode</label>
                                                 <input id="postcode" type="text" class="form-control"
+                                                    @if (!is_null($client->clientInfo)) value="{{ $client->clientInfo->post_code }}" @endif
                                                     placeholder="597626" name="zip">
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-1">
                                                 <label class="form-label" for="city">City</label>
-                                                <input id="city" type="text" class="form-control" value=""
+                                                <input id="city" type="text" class="form-control"
+                                                    @if (!is_null($client->clientInfo)) value="{{ $client->clientInfo->city }}" @endif
                                                     name="city">
                                             </div>
                                         </div>
@@ -504,6 +557,7 @@
                                             <div class="mb-1">
                                                 <label class="form-label" for="state">State</label>
                                                 <input id="state" type="text" class="form-control" name="state"
+                                                    @if (!is_null($client->clientInfo)) value="{{ $client->clientInfo->state }}" @endif
                                                     placeholder="Manhattan">
                                             </div>
                                         </div>
@@ -511,11 +565,12 @@
                                             <div class="mb-1">
                                                 <label class="form-label" for="country">Country</label>
                                                 <input id="country" type="text" class="form-control" name="country"
+                                                    @if (!is_null($client->clientInfo)) value="{{ $client->clientInfo->country }}" @endif
                                                     placeholder="United States">
                                             </div>
                                         </div>
                                         <div class="col-12 d-flex flex-sm-row flex-column mt-2">
-                                            <button type="button" onclick="addClientInfos({{$client->id}})"
+                                            <button type="button" onclick="addClientInfos({{ $client->id }})"
                                                 class="btn btn-primary mb-1 mb-sm-0 me-0 me-sm-1 waves-effect waves-float waves-light">Save
                                                 Changes</button>
                                             <button type="reset"
