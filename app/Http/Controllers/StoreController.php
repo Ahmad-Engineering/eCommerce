@@ -89,6 +89,12 @@ class StoreController extends Controller
      */
     public function edit(Store $store)
     {
+        $exists = Store::where([
+            ['id', $store->id],
+            ['admin_id', auth('admin')->user()->id],
+        ])->exists();
+        if (!$exists)
+            return redirect()->route('store.index');
         //
         if ($store->admin_id != auth('admin')->user()->id) {
             return redirect()->route('store.index');
@@ -107,6 +113,13 @@ class StoreController extends Controller
      */
     public function update(Request $request, Store $store)
     {
+        $exists = Store::where([
+            ['id', $store->id],
+            ['admin_id', auth('admin')->user()->id],
+        ])->exists();
+        if (!$exists)
+            return redirect()->route('store.index');
+
         $validator = Validator($request->all(), [
             'store_name' => 'required|string|min:3|max:50',
             'goods_amount' => 'required|integer|min:0',
@@ -141,6 +154,12 @@ class StoreController extends Controller
      */
     public function destroy(Store $store)
     {
+        $exists = Store::where([
+            ['id', $store->id],
+            ['admin_id', auth('admin')->user()->id],
+        ])->exists();
+        if (!$exists)
+            return redirect()->route('store.index');
         //
         if ($store->delete()) {
             return response()->json([

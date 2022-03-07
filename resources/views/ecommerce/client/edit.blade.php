@@ -55,7 +55,7 @@
                             <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
                                 <!-- users edit start -->
                                 <div class="d-flex mb-2">
-                                    <img src="../../../app-assets/images/avatars/7.png" alt="users avatar"
+                                    <img src="{{asset('ecommerce/app-assets/images/avatars/7.png')}}" alt="users avatar"
                                         class="user-avatar users-avatar-shadow rounded me-2 my-25 cursor-pointer"
                                         height="90" width="90">
                                     <div class="mt-50">

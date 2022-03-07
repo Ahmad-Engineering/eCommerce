@@ -79,7 +79,7 @@ class ClientController extends Controller
             $client->position = 'client';
             $client->location = $request->get('location');
             $client->status = $request->get('status') == 'active' ? '1' : '0';
-            $client->notes = $request->get('notes') == NULL ? NULL : $request->get('notes');
+            $client->notes = $request->get('notes');
             $client->password = Hash::make('password');
             $isCreated = $client->save();
             $client = Client::where('email', $request->get('email'))->first();
@@ -194,6 +194,15 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
+        $exists = Client::whereHas('admins', function ($query) use($client) {
+            $query->where([
+                ['admin_id', auth('admin')->user()->id],
+                ['client_id', $client->id]
+            ]);
+        })->exists();
+
+        if (!$exists)
+            return redirect()->route('client.index');
         //
         if ($client->delete()) {
 
@@ -234,6 +243,15 @@ class ClientController extends Controller
     }
 
     public function unblockClient ($id) {
+        $exists = Client::whereHas('admins', function ($query) use($id) {
+            $query->where([
+                ['admin_id', auth('admin')->user()->id],
+                ['client_id', $id]
+            ]);
+        })->exists();
+        if (!$exists)
+            return redirect()->route('client.index');
+
         $validator = Validator([
             'id' => 'required|integer|exists:clients,id',
         ]);
@@ -265,6 +283,16 @@ class ClientController extends Controller
     }
 
     public function blockClient ($id) {
+
+        $exists = Client::whereHas('admins', function ($query) use($id) {
+            $query->where([
+                ['admin_id', auth('admin')->user()->id],
+                ['client_id', $id]
+            ]);
+        })->exists();
+        if (!$exists)
+            return redirect()->route('client.index');
+
         $validator = Validator([
             'id' => 'required|integer|exists:clients,id',
         ]);

@@ -156,6 +156,13 @@ class ContractController extends Controller
      */
     public function edit(Contract $contract)
     {
+        $exists = Contract::where([
+            ['id', $contract->id],
+            ['admin_id', auth('admin')->user()->id],
+        ])->exists();
+
+        if (!$exists)
+            return redirect()->route('contract.index');
         //
         $clients = Client::select(['id', 'name'])
             ->whereHas('admins', function ($query) {
@@ -181,6 +188,13 @@ class ContractController extends Controller
      */
     public function update(Request $request, Contract $contract)
     {
+        $exists = Contract::where([
+            ['id', $contract->id],
+            ['admin_id', auth('admin')->user()->id],
+        ])->exists();
+        if (!$exists)
+            return redirect()->route('contract.index');
+
         $validator = Validator($request->all(), [
             'title' => 'required|string|min:3|max:50',
             'price' => 'required|numeric|min:10',
@@ -224,6 +238,12 @@ class ContractController extends Controller
      */
     public function destroy(Contract $contract)
     {
+        $exists = Contract::where([
+            ['id', $contract->id],
+            ['admin_id', auth('admin')->user()->id],
+        ])->exists();
+        if (!$exists)
+            return redirect()->route('contract.index');
         //
         if ($contract->delete()) {
             return response()->json([
