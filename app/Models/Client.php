@@ -28,4 +28,8 @@ class Client extends Model
     {
         return $this->hasOne(ClientInfo::class, 'client_id', 'id');
     }
+
+    public function branches () {
+        return $this->hasMany(Branch::class, 'client_id', 'id');
+    }
 }
