@@ -22,11 +22,11 @@ class CreateBranchesTable extends Migration
             $table->string('position', 20)->default('client');
 
             // Admin Foreign Key
-            $table->foreignId('admin_id');
+            $table->foreignId('admin_id')->nullable();
             $table->foreign('admin_id')->on('admins')->references('id');
 
             // Client Foreign Key
-            $table->foreignId('client_id');
+            $table->foreignId('client_id')->nullable();
             $table->foreign('client_id')->on('clients')->references('id');
 
             $table->timestamps();

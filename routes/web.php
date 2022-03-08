@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminAccountSettingsController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ClientChangePasswordController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientInfoController;
@@ -84,6 +85,11 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     // Resource
     Route::resource('contract', ContractController::class);
     // -- End Contract Routes --
+
+    // -- Begin Branch Routes --
+    // Resource
+    Route::resource('branch', BranchController::class);
+    // -- End Branch Routes --
 
     // -- Begin Store Routes --
     // Resource

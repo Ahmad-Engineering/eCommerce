@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use Dotenv\Validator;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class BranchController extends Controller
 {
@@ -14,7 +16,14 @@ class BranchController extends Controller
      */
     public function index()
     {
+        $branches = Branch::where([
+            ['admin_id', auth('admin')->user()->id],
+            ['position', 'admin']
+        ])->get();
         //
+        return response()->view('ecommerce.branch.index', [
+            'branches' => $branches,
+        ]);
     }
 
     /**
@@ -25,6 +34,7 @@ class BranchController extends Controller
     public function create()
     {
         //
+        return response()->view('ecommerce.branch.create');
     }
 
     /**
@@ -35,7 +45,39 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
+        $validoter = Validator($request->all(), [
+            'branch_name' => 'required|string|min:3|max:45',
+            'branch_address' => 'required|string|min:3|max:100',
+            'goods_number' => 'required|integer|min:0',
+            'branch_type' => 'required|string|min:3|max:45',
+        ]);
         //
+        if (!$validoter->fails()) {
+            $branch = new Branch();
+            $branch->name = $request->get('branch_name');
+            $branch->address = $request->get('branch_address');
+            $branch->goods_amount = $request->get('goods_number');
+            $branch->type = $request->get('branch_type');
+
+            if (auth('admin')->check()) {
+                $branch->position = 'admin';
+                $branch->admin_id = auth('admin')->user()->id;
+            }else if (auth('client')->check()) {
+                $branch->position = 'client';
+                $branch->client_id = auth('client')->user()->id;
+            }
+
+            $isCreated = $branch->save();
+
+            return response()->json([
+                'message' => $isCreated ? 'Branch created successfully' : 'Faild to create branch',
+            ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+
+        }else {
+            return response()->json([
+                'message' => $validoter->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
