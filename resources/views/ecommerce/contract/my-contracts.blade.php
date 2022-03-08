@@ -114,6 +114,7 @@
                         <thead>
                             <tr>
                                 <th></th>
+                                <th>No.</th>
                                 <th>Contract</th>
                                 <th>Client</th>
                                 <th>Status</th>
@@ -132,6 +133,9 @@
                                 <tr>
                                     <td>
                                         {{ $no }}
+                                    </td>
+                                    <td>
+                                        {{ $contract->id }}
                                     </td>
                                     <td>
                                         <span class="fw-bold">{{ $contract->title }}</span>

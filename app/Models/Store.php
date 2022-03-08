@@ -9,7 +9,17 @@ class Store extends Model
 {
     use HasFactory;
 
-    public function admin (){
+    protected $fillable = [
+        'amount',
+    ];
+
+    public function admin()
+    {
         return $this->belongsTo(Admin::class, 'admin_id', 'id');
+    }
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class, 'store_id', 'id');
     }
 }

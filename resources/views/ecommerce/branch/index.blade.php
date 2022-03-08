@@ -25,11 +25,11 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>Store</th>
-                                <th>Goods</th>
-                                <th>Price per unit</th>
-                                <th>Offer</th>
-                                <th>Price after offer</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Amount</th>
+                                <th>Type</th>
+                                <th>Created at</th>
                                 <th>Settings</th>
                             </tr>
                         </thead>
@@ -46,16 +46,16 @@
                                         {{ $branch->name }}
                                     </td>
                                     <td>
-                                        {{ $branch->amount }}
+                                        {{ $branch->address }}
                                     </td>
                                     <td>
-                                        {{ $branch->price }}
+                                        {{ $branch->goods_amount }}
                                     </td>
                                     <td>
-                                        {{ '%' . $branch->offer }}
+                                        {{ $branch->type }}
                                     </td>
                                     <td>
-                                        {{ $branch->price_after_offer }}
+                                        {{ $branch->created_at->format('d/m/y') }}
                                     </td>
                                     <td>
                                         <div class="dropdown">

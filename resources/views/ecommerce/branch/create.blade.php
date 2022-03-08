@@ -39,8 +39,8 @@
                             <span style="padding: 15px;"></span>
                             <div class="col-sm-6 col-12 mb-1 mb-sm-0">
                                 <div class="form-floating">
-                                    <input type="number" class="form-control" id="goods_number" placeholder="1000">
-                                    <label for="goods_number">Goods Piece Number</label>
+                                    <input type="number" class="form-control" id="contract_no" placeholder="1000">
+                                    <label for="contract_no">Contract Number</label>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-12 mb-1 mb-sm-0">
@@ -78,7 +78,7 @@
             axios.post('/admin/branch', {
                     branch_name: document.getElementById('branch_name').value,
                     branch_address: document.getElementById('branch_address').value,
-                    goods_number: document.getElementById('goods_number').value,
+                    contract_no: document.getElementById('contract_no').value,
                     branch_type: document.getElementById('branch_type').value,
                 })
                 .then(function(response) {

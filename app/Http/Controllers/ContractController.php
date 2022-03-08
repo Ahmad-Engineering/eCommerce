@@ -117,7 +117,9 @@ class ContractController extends Controller
                 $contract->price = $request->get('price') - $request->get('tax_no');
                 $contract->price_after_offer = ($request->get('price') - ($request->get('price') / 100) * $store->offer);
                 $contract->tax_no = $request->get('price') / 200;
+                $contract->peice_no = $request->get('peice_no');
                 $contract->contract_type_id = $request->get('contract_type_id');
+                $contract->store_id = $store->id;
                 $contract->type = $contractType->type;
                 $isCreated = $contract->save();
 

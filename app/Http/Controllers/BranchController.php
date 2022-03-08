@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\Contract;
+use App\Models\Store;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,15 +50,49 @@ class BranchController extends Controller
         $validoter = Validator($request->all(), [
             'branch_name' => 'required|string|min:3|max:45',
             'branch_address' => 'required|string|min:3|max:100',
-            'goods_number' => 'required|integer|min:0',
+            'contract_no' => 'required|integer|min:1',
             'branch_type' => 'required|string|min:3|max:45',
         ]);
         //
+
+        $contract = Contract::where([
+            ['admin_id', auth('admin')->user()->id],
+            ['id', $request->get('contract_no')],
+        ])->first();
+
+        // There is no contract
+        if (is_null($contract))
+            return response()->json([
+                'message' => 'Unauthrized access',
+            ], Response::HTTP_BAD_REQUEST);
+
+        // There is no enoght goods
+        $store = Store::where([
+            ['admin_id', auth('admin')->user()->id],
+            ['id', $contract->store_id],
+        ])->first();
+
+        if (is_null($store)){
+            return response()->json([
+                'message' => 'Unauthrized access',
+            ], Response::HTTP_BAD_REQUEST);
+        }else if ($store->amount < $contract->peice_no) {
+            return response()->json([
+                'message' => 'Not enogh goods in the ' . $store->name . ' store',
+            ]. Response::HTTP_BAD_REQUEST);
+        }else {
+            $store->update([
+                'amount' => $store->amount - $contract->peice_no,
+            ]);
+        }
+
+
+
         if (!$validoter->fails()) {
             $branch = new Branch();
             $branch->name = $request->get('branch_name');
             $branch->address = $request->get('branch_address');
-            $branch->goods_amount = $request->get('goods_number');
+            $branch->goods_amount = $contract->peice_no;
             $branch->type = $request->get('branch_type');
 
             if (auth('admin')->check()) {
