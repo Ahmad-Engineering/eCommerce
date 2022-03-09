@@ -72,15 +72,15 @@ class BranchController extends Controller
             ['id', $contract->store_id],
         ])->first();
 
-        if (is_null($store)){
+        if (is_null($store)) {
             return response()->json([
                 'message' => 'Unauthrized access',
             ], Response::HTTP_BAD_REQUEST);
-        }else if ($store->amount < $contract->peice_no) {
+        } else if ($store->amount < $contract->peice_no) {
             return response()->json([
                 'message' => 'Not enogh goods in the ' . $store->name . ' store',
-            ]. Response::HTTP_BAD_REQUEST);
-        }else {
+            ] . Response::HTTP_BAD_REQUEST);
+        } else {
             $store->update([
                 'amount' => $store->amount - $contract->peice_no,
             ]);
@@ -92,13 +92,14 @@ class BranchController extends Controller
             $branch = new Branch();
             $branch->name = $request->get('branch_name');
             $branch->address = $request->get('branch_address');
+            $branch->contract_id = $request->get('contract_no');
             $branch->goods_amount = $contract->peice_no;
             $branch->type = $request->get('branch_type');
 
             if (auth('admin')->check()) {
                 $branch->position = 'admin';
                 $branch->admin_id = auth('admin')->user()->id;
-            }else if (auth('client')->check()) {
+            } else if (auth('client')->check()) {
                 $branch->position = 'client';
                 $branch->client_id = auth('client')->user()->id;
             }
@@ -108,8 +109,7 @@ class BranchController extends Controller
             return response()->json([
                 'message' => $isCreated ? 'Branch created successfully' : 'Faild to create branch',
             ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
-
-        }else {
+        } else {
             return response()->json([
                 'message' => $validoter->getMessageBag()->first(),
             ], Response::HTTP_BAD_REQUEST);
@@ -135,7 +135,21 @@ class BranchController extends Controller
      */
     public function edit(Branch $branch)
     {
+
+        // Check Contract Status
+        $contract = Contract::where('id', $branch->contract_id)->first();
+        if (!$contract->status)
+            return redirect()->route('branch.index');
+
+        if (!Branch::where([
+            ['admin_id', auth('admin')->user()->id],
+            ['id', $branch->id]
+        ])->exists())
+            return redirect()->route('branch.index');
         //
+        return response()->view('ecommerce.branch.edit', [
+            'branch' => $branch,
+        ]);
     }
 
     /**
@@ -147,7 +161,40 @@ class BranchController extends Controller
      */
     public function update(Request $request, Branch $branch)
     {
+        $validator = Validator($request->all(), [
+            'branch_name' => 'required|string|min:3|max:50',
+            'branch_address' => 'required|string|min:3|max:100',
+            // 'contract_no' => 'required|integer|exists:contracts,id',
+            'branch_type' => 'required|string|min:3|max:45',
+        ]);
         //
+        if (!$validator->fails()) {
+
+            // Check authrization
+            if (!Branch::where([
+                ['admin_id', auth('admin')->user()->id],
+                ['id', $branch->id],
+            ])->exists())
+                return redirect()->route('branch.index');
+
+            // Check Contract Status
+            $contract = Contract::where('id', $branch->contract_id)->first();
+            if (!$contract->status)
+                return redirect()->route('branch.index');
+
+            $branch->name = $request->get('branch_name');
+            $branch->address = $request->get('branch_address');
+            $branch->type = $request->get('branch_type');
+            $isUpdated = $branch->save();
+
+            return response()->json([
+                'message' => $isUpdated ? 'Branch updated successfully' : 'Faild to update branch',
+            ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        } else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**

@@ -33,4 +33,9 @@ class Contract extends Model
     {
         return $this->belongsTo(Store::class, 'store_id', 'id');
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'contract_id', 'id');
+    }
 }
