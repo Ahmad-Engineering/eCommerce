@@ -3,6 +3,34 @@
 @section('page-title', 'Edit Client')
 
 @section('content')
+    @if (is_null($client->clientInfo))
+        <section id="alerts-with-title">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Complete Client Informations</h4>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Please, complete your client information
+                                <code>{{ $client->email }}</code></p>
+                            <div class="demo-spacing-0">
+                                <div class="alert alert-warning" role="alert">
+                                    <h4 class="alert-heading">Complete Infos</h4>
+                                    <div class="alert-body">
+                                        Without completing your client <a href="{{ route('client.edit', $client->id) }}"
+                                            class="alert-link">{{ $client->name }}</a>
+                                        You cannt printing or deal with him with your contract!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+
     <div class="content-wrapper container-xxl p-0">
         <div class="content-header row">
         </div>
@@ -55,7 +83,7 @@
                             <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
                                 <!-- users edit start -->
                                 <div class="d-flex mb-2">
-                                    <img src="{{asset('ecommerce/app-assets/images/avatars/7.png')}}" alt="users avatar"
+                                    <img src="{{ asset('ecommerce/app-assets/images/avatars/7.png') }}" alt="users avatar"
                                         class="user-avatar users-avatar-shadow rounded me-2 my-25 cursor-pointer"
                                         height="90" width="90">
                                     <div class="mt-50">

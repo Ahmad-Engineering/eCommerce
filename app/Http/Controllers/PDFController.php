@@ -32,7 +32,9 @@ class PDFController extends Controller
             ->first();
         $client_info = ClientInfo::where('client_id', $contract->client->id)->exists();
         if (!$client_info)
-            return redirect()->route('client-info.create');
+            return redirect()->route('client.edit', $contract->client->id)->with([
+                'message' => 'Complete your client information, please',
+            ]);
 
         $pdf = Pdf::loadView('ecommerce.pdf.admin-client-contract', [
             'contract' => $contract,

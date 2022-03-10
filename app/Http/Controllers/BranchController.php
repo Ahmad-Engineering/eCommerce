@@ -50,7 +50,7 @@ class BranchController extends Controller
         $validoter = Validator($request->all(), [
             'branch_name' => 'required|string|min:3|max:45',
             'branch_address' => 'required|string|min:3|max:100',
-            'contract_no' => 'required|integer|min:1',
+            'contract_no' => 'required|integer|exists:contracts,id',
             'branch_type' => 'required|string|min:3|max:45',
         ]);
         //
@@ -59,6 +59,12 @@ class BranchController extends Controller
             ['admin_id', auth('admin')->user()->id],
             ['id', $request->get('contract_no')],
         ])->first();
+
+        // Check Contract Is Used ?
+        if ($contract->used)
+            return response()->json([
+                'message' => 'Contract is used before',
+            ], Response::HTTP_BAD_REQUEST);
 
         // There is no contract
         if (is_null($contract))

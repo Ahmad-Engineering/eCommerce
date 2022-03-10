@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Client;
 use App\Models\Contract;
 use App\Models\ContractType;
@@ -40,11 +41,15 @@ class ContractController extends Controller
             ['admin_id', auth('admin')->user()->id],
             ['status', 1],
         ])->sum('price');
+        $branch_no = Branch::where([
+            ['admin_id', auth('admin')->user()->id],
+        ])->count();
         return response()->view('ecommerce.contract.my-contracts', [
             'contracts' => $contracts,
             'contract_no' => $contract_no,
             'client_no' => $client_no,
             'admin_price' => $admin_price,
+            'branch_no' => $branch_no,
         ]);
     }
 
