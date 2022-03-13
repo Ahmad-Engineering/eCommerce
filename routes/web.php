@@ -12,6 +12,7 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\ContractTypeController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StoreController;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Route;
@@ -71,6 +72,11 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     // Resource
     Route::resource('contract-type', ContractTypeController::class);
     // -- End Contract Type Routes --
+
+    // -- Begin Product Routes --
+    // Resource
+    Route::resource('product', ProductController::class);
+    // -- End Product Routes --
 
     // -- Begin PDF Routes --
     // Download Contract
