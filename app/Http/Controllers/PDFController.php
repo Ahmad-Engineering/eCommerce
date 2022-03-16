@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\ClientInfo;
 use App\Models\Contract;
+use App\Models\Product;
 use App\Models\Store;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -66,5 +67,23 @@ class PDFController extends Controller
             'stores' => $stores,
         ]);
         return $stores_pdf->download('stores.pdf');
+    }
+
+    public function adminProductsAsPDF()
+    {
+        $products = Product::where([
+            ['status', '1'],
+        ])
+        ->with('store', function($query) {
+            $query->where('admin_id', auth('admin')->user()->id);
+        })
+        ->get();
+
+        $products_pdf = Pdf::loadView('ecommerce.pdf.admin-products', [
+            'products' => $products,
+        ]);
+        return $products_pdf->download('products.pdf');
+
+        // return response()->view('ecommerce.pdf.admin-products');
     }
 }

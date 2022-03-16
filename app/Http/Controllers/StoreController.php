@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Store;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
@@ -134,6 +135,12 @@ class StoreController extends Controller
             $store->offer = $request->get('special_offer');
             $store->price_after_offer = ($request->get('piece_price') - ($request->get('piece_price') / 100) * $request->get('special_offer'));
             $isUpdated = $store->save();
+
+            Product::where([
+                ['store_id', $store->id],
+            ])->update([
+                'price' => $store->price - (($store->offer / 100) * $store->price),
+            ]);
 
             return response()->json([
                 'message' => $isUpdated ? 'Store updated successfully' : 'Faild to update store',

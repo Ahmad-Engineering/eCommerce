@@ -13,6 +13,7 @@
                     <div class="card-body">
                         <p>
                             After adding your new product, it'll be visible to buy in the <code>Manarat</code> market.
+                            <br><code>note.</code> After you create your product, make sure you cannot change your product image.
                         </p>
                         <form class="needs-validation" novalidate="" m>
                             <div class="row g-1">
