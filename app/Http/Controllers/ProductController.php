@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Store;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
@@ -137,6 +138,25 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if ($product->store->admin_id != auth('admin')->user()->id)
+            return redirect()->route('product.index');
         //
+        $product_image_path = public_path('/images/products/') . $product->image;
+        if (File::exists($product_image_path))
+            File::delete($product_image_path); 
+
+        if ($product->delete()) {
+            return response()->json([
+                'icon' => 'success',
+                'title' => 'Deleted!',
+                'text' => 'Product deleted successfully', 
+            ], Response::HTTP_OK);
+        }else {
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'Faild!',
+                'text' => 'Faild to delete product', 
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 }
