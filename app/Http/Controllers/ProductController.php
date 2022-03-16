@@ -22,7 +22,7 @@ class ProductController extends Controller
             ['status', 1],
         ])
         ->with('store', function ($query) {
-            $query->where('id', auth('admin')->user()->id);
+            $query->where('admin_id', auth('admin')->user()->id);
         })
         ->get();
         //
@@ -115,7 +115,17 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        if (auth('admin')->user()->id != $product->store->admin_id)
+            return redirect()->route('product.index');
         //
+        $stores = Store::where([
+            ['admin_id', auth('admin')->user()->id],
+            ['status', '1']
+        ])->get();
+        return response()->view('ecommerce.product.edit', [
+            'product' => $product,
+            'stores' => $stores,
+        ]);
     }
 
     /**
@@ -127,7 +137,26 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        $validator = Validator($request->all(), [
+            'product_name' => 'required|string|min:3|max:50',
+            'store_id' => 'required|integer|exists:stores,id',
+            'status' => 'required|boolean',
+        ]);
         //
+        if (!$validator->fails()) {
+            $product->name = $request->get('product_name');
+            $product->store_id = $request->get('store_id');
+            $product->status = $request->get('status');
+            $isUpdated = $product->save();
+
+            return response()->json([
+                'message' => $isUpdated ? 'Product updated successfully' : 'Faild to update product',
+            ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        }else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
