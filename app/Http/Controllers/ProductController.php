@@ -17,7 +17,17 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $products = Product::where([
+            ['status', 1],
+        ])
+        ->with('store', function ($query) {
+            $query->where('id', auth('admin')->user()->id);
+        })
+        ->get();
         //
+        return response()->view('ecommerce.product.index', [
+            'products' => $products,
+        ]);
     }
 
     /**

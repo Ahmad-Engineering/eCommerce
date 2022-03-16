@@ -274,7 +274,7 @@
             </svg>
             <span class="menu-title text-truncate" data-i18n="User">Product</span></a>
         <ul class="menu-content">
-            <li><a class="d-flex align-items-center" href="#">
+            <li><a class="d-flex align-items-center" href="{{route('product.index')}}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-bag" viewBox="0 0 16 16">
                         <path

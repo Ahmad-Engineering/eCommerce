@@ -23,7 +23,7 @@ class CreateContractPaymentMethodsTable extends Migration
 
             // Payment Method Foreign Key
             $table->foreignId('payment_method_id');
-            $table->foreign('payment_method_id')->on('payment_methods')->references('ids');
+            $table->foreign('payment_method_id')->on('payment_methods')->references('id');
 
             $table->timestamps();
         });
