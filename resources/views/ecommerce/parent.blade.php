@@ -130,8 +130,8 @@
                         </li>
                         <li class="scrollable-container media-list">
                             <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                    src="{{ asset('ecommerce/app-assets/images/pages/eCommerce/1.png') }}" alt="donuts"
-                                    width="62">
+                                    src="{{ asset('ecommerce/app-assets/images/pages/eCommerce/1.png') }}"
+                                    alt="donuts" width="62">
                                 <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                         data-feather="x"></i>
                                     <div class="media-heading">
@@ -148,8 +148,8 @@
                                 </div>
                             </div>
                             <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                    src="{{ asset('ecommerce/app-assets/images/pages/eCommerce/7.png') }}" alt="donuts"
-                                    width="62">
+                                    src="{{ asset('ecommerce/app-assets/images/pages/eCommerce/7.png') }}"
+                                    alt="donuts" width="62">
                                 <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                         data-feather="x"></i>
                                     <div class="media-heading">
@@ -166,8 +166,8 @@
                                 </div>
                             </div>
                             <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                    src="{{ asset('ecommerce/app-assets/images/pages/eCommerce/2.png') }}" alt="donuts"
-                                    width="62">
+                                    src="{{ asset('ecommerce/app-assets/images/pages/eCommerce/2.png') }}"
+                                    alt="donuts" width="62">
                                 <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                         data-feather="x"></i>
                                     <div class="media-heading">
@@ -184,8 +184,8 @@
                                 </div>
                             </div>
                             <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                    src="{{ asset('ecommerce/app-assets/images/pages/eCommerce/3.png') }}" alt="donuts"
-                                    width="62">
+                                    src="{{ asset('ecommerce/app-assets/images/pages/eCommerce/3.png') }}"
+                                    alt="donuts" width="62">
                                 <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                         data-feather="x"></i>
                                     <div class="media-heading">
@@ -202,8 +202,8 @@
                                 </div>
                             </div>
                             <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                    src="{{ asset('ecommerce/app-assets/images/pages/eCommerce/5.png') }}" alt="donuts"
-                                    width="62">
+                                    src="{{ asset('ecommerce/app-assets/images/pages/eCommerce/5.png') }}"
+                                    alt="donuts" width="62">
                                 <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                         data-feather="x"></i>
                                     <div class="media-heading">
@@ -335,7 +335,8 @@
                 <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"
                         id="dropdown-user" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
-                        <div class="user-nav d-sm-flex d-none"><span class="user-name fw-bolder">{{auth('admin')->user()->name}}</span><span
+                        <div class="user-nav d-sm-flex d-none"><span
+                                class="user-name fw-bolder">{{ auth('admin')->user()->name }}</span><span
                                 class="user-status">Admin</span></div><span class="avatar"><img
                                 class="round"
                                 src="{{ asset('ecommerce/app-assets/images/portrait/small/avatar-s-11.jpg') }}"
@@ -885,9 +886,9 @@
                         <!--/ Medal Card -->
 
                         <!-- Statistics Card -->
+                        @yield('content')
                         <div class="col-xl-12 col-md-12 col-12">
                             <div class="card card-statistics">
-                                @yield('content')
                             </div>
                         </div>
                         <!--/ Statistics Card -->
@@ -1577,7 +1578,7 @@
         })
     </script>
     {{-- SWEET ALERT --}}
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- AXIOS LIBRARY --}}
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Toastr -->

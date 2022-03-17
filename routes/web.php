@@ -62,6 +62,8 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     Route::resource('cpanel', AdminController::class);
     // Admin Account Settings
     Route::prefix('admin-settings')->group(function () {
+        // Show Admin Account Settings
+        Route::get('/', [AdminAccountSettingsController::class, 'showAdminAccountSettings'])->name('show.admin.account.settings');
         // Change Admin Password
         Route::get('change-password', [AdminAccountSettingsController::class, 'showChangePassword'])->name('change.admin.password');
         Route::put('change-password', [AdminAccountSettingsController::class, 'changePassword']);

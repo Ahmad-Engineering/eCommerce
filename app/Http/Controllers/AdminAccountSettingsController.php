@@ -47,4 +47,8 @@ class AdminAccountSettingsController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
     }
+
+    public function showAdminAccountSettings () {
+        return response()->view('ecommerce.admin.settings.account-settings');
+    }
 }
