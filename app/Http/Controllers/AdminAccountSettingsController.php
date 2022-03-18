@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
+use App\Models\AdminInfo;
+use App\Models\AdminSocial;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -49,6 +52,17 @@ class AdminAccountSettingsController extends Controller
     }
 
     public function showAdminAccountSettings () {
-        return response()->view('ecommerce.admin.settings.account-settings');
+        $admin = auth('admin')->user();
+        $admin_info = AdminInfo::where([
+            ['admin_id', auth('admin')->user()->id],
+        ])->first();
+        $admin_social = AdminSocial::where([
+            ['admin_id', auth('admin')->user()->id],
+        ])->first();
+        return response()->view('ecommerce.admin.settings.account-settings', [
+            'admin' => $admin,
+            'admin_info' => $admin_info,
+            'admin_social' => $admin_social, 
+        ]);
     }
 }

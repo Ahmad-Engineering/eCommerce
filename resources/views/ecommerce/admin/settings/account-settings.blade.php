@@ -294,7 +294,11 @@
                                                 <div class="col-12">
                                                     <div class="mb-1">
                                                         <label class="form-label" for="bio">Bio</label>
-                                                        <textarea class="form-control" id="bio" rows="4" placeholder="Follow this format: 2000-01-01"></textarea>
+                                                        <textarea class="form-control" id="bio" rows="4" placeholder="Enter your bio ...">
+                                                            @if (!is_null($admin_info->bio))
+{{ $admin_info->bio }}
+@endif
+                                                        </textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-sm-6">
@@ -302,7 +306,9 @@
                                                         <label class="form-label" for="BOD">Birth
                                                             date</label>
                                                         <input type="text" class="form-control flatpickr"
-                                                            placeholder="Birth date" id="BOD" name="BOD" />
+                                                            placeholder="Follow this format: 2000-01-01" id="BOD"
+                                                            @if (!is_null($admin_info->DOB)) value = "{{ $admin_info->DOB }}" @endif
+                                                            name="BOD" />
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-sm-6">
@@ -573,14 +579,16 @@
                                                     <div class="mb-1">
                                                         <label class="form-label" for="website">Website</label>
                                                         <input type="text" class="form-control" name="website"
-                                                            id="website" placeholder="Website address" />
+                                                            id="website" placeholder="Website address"
+                                                            @if (!is_null($admin_info->website)) value="{{ $admin_info->website }}" @endif />
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-sm-6">
                                                     <div class="mb-1">
                                                         <label class="form-label" for="phone">Phone</label>
                                                         <input type="text" class="form-control" id="phone"
-                                                            placeholder="Phone number" name="phone" />
+                                                            placeholder="Phone number" name="phone"
+                                                            @if (!is_null($admin_info->phone)) value="{{ $admin_info->phone }}" @endif />
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
@@ -614,7 +622,8 @@
                                                     <div class="mb-1">
                                                         <label class="form-label" for="twitter">Twitter</label>
                                                         <input type="text" id="twitter" class="form-control"
-                                                            placeholder="Add link" />
+                                                            placeholder="Add link"
+                                                            @if (!is_null($admin_social->twitter)) value="{{ $admin_social->twitter }}" @endif />
                                                     </div>
                                                 </div>
                                                 <!-- facebook link input -->
@@ -622,7 +631,8 @@
                                                     <div class="mb-1">
                                                         <label class="form-label" for="facebook">Facebook</label>
                                                         <input type="text" id="facebook" class="form-control"
-                                                            placeholder="Add link" />
+                                                            placeholder="Add link"
+                                                            @if (!is_null($admin_social->facebook)) value="{{ $admin_social->facebook }}" @endif />
                                                     </div>
                                                 </div>
                                                 <!-- google plus input -->
@@ -630,7 +640,8 @@
                                                     <div class="mb-1">
                                                         <label class="form-label" for="google">Google+</label>
                                                         <input type="text" id="google" class="form-control"
-                                                            placeholder="Add link" />
+                                                            placeholder="Add link"
+                                                            @if (!is_null($admin_social->google)) value="{{ $admin_social->google }}" @endif />
                                                     </div>
                                                 </div>
                                                 <!-- linkedin link input -->
@@ -638,7 +649,8 @@
                                                     <div class="mb-1">
                                                         <label class="form-label" for="linkedln">LinkedIn</label>
                                                         <input type="text" id="linkedln" class="form-control"
-                                                            placeholder="Add link" value="https://www.linkedin.com" />
+                                                            placeholder="Add link" value="https://www.linkedin.com"
+                                                            @if (!is_null($admin_social->linkedlin)) value="{{ $admin_social->linkedlin }}" @endif />
                                                     </div>
                                                 </div>
                                                 <!-- instagram link input -->
@@ -646,7 +658,8 @@
                                                     <div class="mb-1">
                                                         <label class="form-label" for="instagram">Instagram</label>
                                                         <input type="text" id="instagram" class="form-control"
-                                                            placeholder="Add link" />
+                                                            placeholder="Add link"
+                                                            @if (!is_null($admin_social->instagram)) value="{{ $admin_social->instagram }}" @endif />
                                                     </div>
                                                 </div>
                                                 <!-- Quora link input -->
@@ -654,7 +667,8 @@
                                                     <div class="mb-1">
                                                         <label class="form-label" for="quora">Quora</label>
                                                         <input type="text" id="quora" class="form-control"
-                                                            placeholder="Add link" />
+                                                            placeholder="Add link"
+                                                            @if (!is_null($admin_social->quora)) value="{{ $admin_social->quora }}" @endif />
                                                     </div>
                                                 </div>
 
@@ -674,36 +688,62 @@
                                                         <!-- twitter user -->
                                                         <div class="col-6 col-md-3 text-center mb-1">
                                                             <p class="fw-bold">Your Twitter</p>
-                                                            <div class="avatar mb-1">
-                                                                <span class="avatar-content">
-                                                                    <img src="/app-assets/images/avatars/11-small.png"
-                                                                        alt="avatar img" width="40" height="40" />
-                                                                </span>
-                                                            </div>
-                                                            <p class="mb-0">@johndoe</p>
-                                                            <a href="#">Disconnect</a>
+                                                            @if (!is_null($admin_social->twitter))
+                                                                <button class="btn btn-outline-primary"> <a
+                                                                        href="{{ $admin_social->twitter }}">Connect</a></button>
+                                                            @else
+                                                                <a href="#">Disconnect</a>
+                                                            @endif
                                                         </div>
                                                         <!-- facebook button -->
                                                         <div class="col-6 col-md-3 text-center mb-1">
                                                             <p class="fw-bold mb-2">Your Facebook</p>
-                                                            <button class="btn btn-outline-primary">Connect</button>
+                                                            @if (!is_null($admin_social->facebook))
+                                                                <button class="btn btn-outline-primary"> <a
+                                                                        href="{{ $admin_social->facebook }}">Connect</a></button>
+                                                            @else
+                                                                <a href="#">Disconnect</a>
+                                                            @endif
                                                         </div>
                                                         <!-- google user -->
                                                         <div class="col-6 col-md-3 text-center mb-1">
                                                             <p class="fw-bold">Your Google</p>
-                                                            <div class="avatar mb-1">
-                                                                <span class="avatar-content">
-                                                                    <img src="/app-assets/images/avatars/3-small.png"
-                                                                        alt="avatar img" width="40" height="40" />
-                                                                </span>
-                                                            </div>
-                                                            <p class="mb-0">@luraweber</p>
-                                                            <a href="#">Disconnect</a>
+                                                            @if (!is_null($admin_social->google))
+                                                                <button class="btn btn-outline-primary"> <a
+                                                                        href="{{ $admin_social->google }}">Connect</a></button>
+                                                            @else
+                                                                <a href="#">Disconnect</a>
+                                                            @endif
                                                         </div>
-                                                        <!-- github button -->
+                                                        <!-- intagram button -->
                                                         <div class="col-6 col-md-3 text-center mb-2">
-                                                            <p class="fw-bold mb-1">Your GitHub</p>
-                                                            <button class="btn btn-outline-primary">Connect</button>
+                                                            <p class="fw-bold mb-1">Your Instagram</p>
+                                                            @if (!is_null($admin_social->instagram))
+                                                                <button class="btn btn-outline-primary"> <a
+                                                                        href="{{ $admin_social->instagram }}">Connect</a></button>
+                                                            @else
+                                                                <a href="#">Disconnect</a>
+                                                            @endif
+                                                        </div>
+                                                        <!-- Linkedin buton -->
+                                                        <div class="col-6 col-md-3 text-center mb-2">
+                                                            <p class="fw-bold mb-1">Your Linkedin</p>
+                                                            @if (!is_null($admin_social->linkedlin))
+                                                                <button class="btn btn-outline-primary"> <a
+                                                                        href="{{ $admin_social->linkedlin }}">Connect</a></button>
+                                                            @else
+                                                                <a href="#">Disconnect</a>
+                                                            @endif
+                                                        </div>
+                                                        <!-- quora button -->
+                                                        <div class="col-6 col-md-3 text-center mb-2">
+                                                            <p class="fw-bold mb-1">Your Quora</p>
+                                                            @if (!is_null($admin_social->quora))
+                                                                <button class="btn btn-outline-primary"> <a
+                                                                        href="{{ $admin_social->quora }}">Connect</a></button>
+                                                            @else
+                                                                <a href="#">Disconnect</a>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>

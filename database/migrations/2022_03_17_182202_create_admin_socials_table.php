@@ -18,7 +18,7 @@ class CreateAdminSocialsTable extends Migration
             $table->string('twitter', 100)->nullable();
             $table->string('facebook', 100)->nullable();
             $table->string('google', 100)->nullable();
-            $table->string('linkedlin', 100)->nullable();
+            $table->string('linkedin', 100)->nullable();
             $table->string('instagram', 100)->nullable();
             $table->string('quora', 100)->nullable();
 
