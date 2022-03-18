@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminAccountSettingsController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminInfoController;
+use App\Http\Controllers\AdminSocialController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ClientChangePasswordController;
@@ -67,6 +68,8 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
         Route::get('/', [AdminAccountSettingsController::class, 'showAdminAccountSettings'])->name('show.admin.account.settings');
         // Admin General Information
         Route::resource('admin-info', AdminInfoController::class);
+        // Admin Social Media Links
+        Route::resource('admin-social', AdminSocialController::class);
         // Change Admin Password
         Route::get('change-password', [AdminAccountSettingsController::class, 'showChangePassword'])->name('change.admin.password');
         Route::put('change-password', [AdminAccountSettingsController::class, 'changePassword']);

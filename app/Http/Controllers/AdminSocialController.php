@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdminSocial;
+use Dotenv\Validator;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminSocialController extends Controller
 {
@@ -35,7 +37,37 @@ class AdminSocialController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator($request->all(), [
+            'twitter' => 'nullable|string|min:5|max:100',
+            'facebook' => 'nullable|string|min:5|max:100',
+            'google' => 'nullable|string|min:5|max:100',
+            'linkedln' => 'nullable|string|min:5|max:100',
+            'intagram' => 'nullable|string|min:5|max:100',
+            'quora' => 'nullable|string|min:5|max:100',
+        ]);
         //
+        if (!$validator->fails()) {
+            $adminSocial = AdminSocial::where('admin_id', auth('admin')->user()->id)->first();
+            if(is_null($adminSocial))
+                $adminSocial = new AdminSocial();
+                
+            $adminSocial->twitter = $request->get('twitter');
+            $adminSocial->facebook = $request->get('facebook');
+            $adminSocial->linkedlin = $request->get('linkedln');
+            $adminSocial->google = $request->get('google');
+            $adminSocial->instagram = $request->get('instagram');
+            $adminSocial->quora = $request->get('quora');
+            $adminSocial->admin_id = auth('admin')->user()->id;
+            $isCreated = $adminSocial->save();
+
+            return response()->json([
+                'message' => $isCreated ? 'Links added successfully' : 'Faild to add links',
+            ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+        }else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**

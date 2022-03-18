@@ -612,51 +612,48 @@
                                                 <!-- twitter link input -->
                                                 <div class="col-12 col-sm-6">
                                                     <div class="mb-1">
-                                                        <label class="form-label" for="account-twitter">Twitter</label>
-                                                        <input type="text" id="account-twitter" class="form-control"
-                                                            placeholder="Add link" value="https://www.twitter.com" />
+                                                        <label class="form-label" for="twitter">Twitter</label>
+                                                        <input type="text" id="twitter" class="form-control"
+                                                            placeholder="Add link" />
                                                     </div>
                                                 </div>
                                                 <!-- facebook link input -->
                                                 <div class="col-12 col-sm-6">
                                                     <div class="mb-1">
-                                                        <label class="form-label"
-                                                            for="account-facebook">Facebook</label>
-                                                        <input type="text" id="account-facebook" class="form-control"
+                                                        <label class="form-label" for="facebook">Facebook</label>
+                                                        <input type="text" id="facebook" class="form-control"
                                                             placeholder="Add link" />
                                                     </div>
                                                 </div>
                                                 <!-- google plus input -->
                                                 <div class="col-12 col-sm-6">
                                                     <div class="mb-1">
-                                                        <label class="form-label" for="account-google">Google+</label>
-                                                        <input type="text" id="account-google" class="form-control"
+                                                        <label class="form-label" for="google">Google+</label>
+                                                        <input type="text" id="google" class="form-control"
                                                             placeholder="Add link" />
                                                     </div>
                                                 </div>
                                                 <!-- linkedin link input -->
                                                 <div class="col-12 col-sm-6">
                                                     <div class="mb-1">
-                                                        <label class="form-label"
-                                                            for="account-linkedin">LinkedIn</label>
-                                                        <input type="text" id="account-linkedin" class="form-control"
+                                                        <label class="form-label" for="linkedln">LinkedIn</label>
+                                                        <input type="text" id="linkedln" class="form-control"
                                                             placeholder="Add link" value="https://www.linkedin.com" />
                                                     </div>
                                                 </div>
                                                 <!-- instagram link input -->
                                                 <div class="col-12 col-sm-6">
                                                     <div class="mb-1">
-                                                        <label class="form-label"
-                                                            for="account-instagram">Instagram</label>
-                                                        <input type="text" id="account-instagram" class="form-control"
+                                                        <label class="form-label" for="instagram">Instagram</label>
+                                                        <input type="text" id="instagram" class="form-control"
                                                             placeholder="Add link" />
                                                     </div>
                                                 </div>
                                                 <!-- Quora link input -->
                                                 <div class="col-12 col-sm-6">
                                                     <div class="mb-1">
-                                                        <label class="form-label" for="account-quora">Quora</label>
-                                                        <input type="text" id="account-quora" class="form-control"
+                                                        <label class="form-label" for="quora">Quora</label>
+                                                        <input type="text" id="quora" class="form-control"
                                                             placeholder="Add link" />
                                                     </div>
                                                 </div>
@@ -712,8 +709,8 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <!-- submit and cancel button -->
-                                                    <button type="submit" class="btn btn-primary me-1 mt-1">Save
-                                                        changes</button>
+                                                    <button type="button" onclick="addAdminSocials()"
+                                                        class="btn btn-primary me-1 mt-1">Save changes</button>
                                                     <button type="reset"
                                                         class="btn btn-outline-secondary mt-1">Cancel</button>
                                                 </div>
@@ -832,6 +829,32 @@
                     country: document.getElementById('country').value,
                     website: document.getElementById('website').value,
                     phone: document.getElementById('phone').value,
+                })
+                .then(function(response) {
+                    // handle success
+                    console.log(response);
+                    toastr.success(response.data.message);
+                    // location.reload();
+                })
+                .catch(function(error) {
+                    // handle error
+                    console.log(error);
+                    toastr.error(error.response.data.message)
+                })
+                .then(function() {
+                    // always executed
+                });
+        }
+
+        function addAdminSocials() {
+            // /admin/admin-settings/admin-social
+            axios.post('/admin/admin-settings/admin-social', {
+                    twitter: document.getElementById('twitter').value,
+                    facebook: document.getElementById('facebook').value,
+                    google: document.getElementById('google').value,
+                    linkedln: document.getElementById('linkedln').value,
+                    instagram: document.getElementById('instagram').value,
+                    quora: document.getElementById('quora').value,
                 })
                 .then(function(response) {
                     // handle success
