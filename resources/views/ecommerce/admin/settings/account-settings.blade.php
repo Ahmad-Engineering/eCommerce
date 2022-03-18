@@ -149,22 +149,22 @@
                                     <div role="tabpanel" class="tab-pane active" id="account-vertical-general"
                                         aria-labelledby="account-pill-general" aria-expanded="true">
                                         <!-- header section -->
-                                        <div class="d-flex">
+                                        {{-- <div class="d-flex">
                                             <a href="#" class="me-25">
                                                 <img src="/app-assets/images/portrait/small/avatar-s-11.jpg"
                                                     id="account-upload-img" class="rounded me-50" alt="profile image"
                                                     height="80" width="80" />
                                             </a>
                                             <!-- upload and reset button -->
-                                            <div class="mt-75 ms-1">
+                                            {{-- <div class="mt-75 ms-1">
                                                 <label for="account-upload"
                                                     class="btn btn-sm btn-primary mb-75 me-75">Upload</label>
                                                 <input type="file" id="account-upload" hidden accept="image/*" />
                                                 <button class="btn btn-sm btn-outline-secondary mb-75">Reset</button>
                                                 <p>Allowed JPG, GIF or PNG. Max size of 800kB</p>
-                                            </div>
+                                            </div> --}}
                                             <!--/ upload and reset button -->
-                                        </div>
+                                        {{-- </div>  --}}
                                         <!--/ header section -->
 
                                         <!-- form -->

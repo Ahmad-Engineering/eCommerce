@@ -43,4 +43,8 @@ class Admin extends Authenticatable
     public function adminSocial () {
         return $this->hasOne(AdminSocial::class, 'admin_id', 'id');
     }
+
+    public function activities () {
+        return $this->hasMany(AdminActivity::class, 'admin_id', 'id');
+    }
 }
