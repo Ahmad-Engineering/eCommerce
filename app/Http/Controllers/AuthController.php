@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminActivity;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,15 +36,21 @@ class AuthController extends Controller
             ];
 
             if (Auth::guard($request->get('_guard'))->attempt($credentials, $request->get('remember'))) {
+
+                $adminActivity = new AdminActivity();
+                $adminActivity->activity = 'You\'re logged in.';
+                $adminActivity->admin_id = auth('admin')->user()->id;
+                $adminActivity->save();
+
                 return response()->json([
                     'message' => 'login successfully',
                 ], Response::HTTP_OK);
-            }else{
+            } else {
                 return response()->json([
                     'message' => 'wrong credentials',
                 ], Response::HTTP_BAD_REQUEST);
             }
-        }else {
+        } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first(),
             ], Response::HTTP_BAD_REQUEST);
@@ -51,13 +58,20 @@ class AuthController extends Controller
     }
 
 
-    public function logout () {
+    public function logout()
+    {
 
         $guard = 'admin';
         if (auth('admin')->check()) {
             $guard = 'admin';
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re logged out.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
             auth($guard)->logout();
         }
+
+
 
         return redirect()->route('login', $guard);
     }

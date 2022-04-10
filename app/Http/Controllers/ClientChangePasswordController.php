@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminActivity;
 use App\Models\Client;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
@@ -41,6 +42,11 @@ class ClientChangePasswordController extends Controller
 
                 $client->password = Hash::make($request->get('new_password'));
                 $isChanged = $client->save();
+
+                $adminActivity = new AdminActivity();
+                $adminActivity->activity = 'You\'re changed client: ' . $client->name . ' password.';
+                $adminActivity->admin_id = auth('admin')->user()->id;
+                $adminActivity->save();
 
                 return response()->json([
                     'message' => $isChanged ? 'Client password changed successfully' : 'Faild to change client password',

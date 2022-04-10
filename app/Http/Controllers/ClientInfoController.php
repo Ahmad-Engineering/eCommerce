@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminActivity;
+use App\Models\Client;
 use App\Models\ClientInfo;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
@@ -58,6 +60,8 @@ class ClientInfoController extends Controller
         //
         if (!$validator->fails()) {
 
+            $client = Client::where('id', $request->get('client_id'))->first();
+
             $clientInfo = ClientInfo::where('client_id', $request->get('client_id'))->first();
             if (is_null($clientInfo)) {
                 $clientInfo = new ClientInfo();
@@ -79,11 +83,15 @@ class ClientInfoController extends Controller
             $clientInfo->client_id = $request->get('client_id');
             $isCreated = $clientInfo->save();
 
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re updated ' . $client->name. ', client.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
+
             return response()->json([
                 'message' => $isCreated ? 'Client personal informations updated successfully' : 'Faild to update client personal informations',
             ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
-
-        }else {
+        } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first(),
             ], Response::HTTP_BAD_REQUEST);

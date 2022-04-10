@@ -12,4 +12,8 @@ class Product extends Model
     public function store () {
         return $this->belongsTo(Store::class, 'store_id', 'id');
     }
+
+    public function admin () {
+        return $this->belongsTo(Admin::class, 'admin_id', 'id');
+    }
 }

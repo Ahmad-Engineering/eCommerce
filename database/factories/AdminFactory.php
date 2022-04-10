@@ -22,7 +22,7 @@ class AdminFactory extends Factory
             'status' => '1',
             'bio' => 'This is Ahmad bio',
             'position' => 'admin',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('Ahmadpassword0599abd!@#'),
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminActivity;
 use App\Models\AdminInfo;
 use Carbon\Carbon;
 use Dotenv\Validator;
@@ -38,7 +39,6 @@ class AdminInfoController extends Controller
      */
     public function store(Request $request)
     {
-        $start_date = '1-1-2010';
         $validator = Validator($request->all(), [
             'bio' => ['nullable', 'string' ,'min:20', 'max:100'],
             'bod' => 'required|date',
@@ -57,8 +57,13 @@ class AdminInfoController extends Controller
             $adminInfo->admin_id = auth('admin')->user()->id;
             $isCreated = $adminInfo->save();
 
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re updated your account info.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $isAdded = $adminActivity->save();
+
             return response()->json([
-                'message' => $isCreated ? 'Information were added successfully' : 'Faild to add your infomation',
+                'message' => $isCreated || $isAdded ? 'Information were added successfully' : 'Faild to add your infomation',
             ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
         }else {
             return response()->json([

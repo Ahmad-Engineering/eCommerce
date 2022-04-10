@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\AdminActivity;
 use App\Models\AdminInfo;
 use App\Models\AdminSocial;
 use Dotenv\Validator;
@@ -12,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminAccountSettingsController extends Controller
 {
+    
+
     //
     public function showChangePassword () {
         return response()->view('ecommerce.admin.settings.change-password');
@@ -30,9 +33,14 @@ class AdminAccountSettingsController extends Controller
                     $admin = auth('admin')->user();
                     $admin->password = Hash::make($request->get('new_password'));
                     $isUpdated = $admin->save();
+                    
+                    $adminActivity = new AdminActivity();
+                    $adminActivity->activity = 'You are changed your password.';
+                    $adminActivity->admin_id = auth('admin')->user()->id;
+                    $isCreated = $adminActivity->save();
 
                     return response()->json([
-                        'message' => $isUpdated ? 'Password changed successfully' : 'Faild to change password',
+                        'message' => $isUpdated || $isCreated ? 'Password changed successfully' : 'Faild to change password',
                     ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
                 }else {
                     return response()->json([
@@ -50,6 +58,7 @@ class AdminAccountSettingsController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
     }
+
 
     public function showAdminAccountSettings () {
         $admin = auth('admin')->user();

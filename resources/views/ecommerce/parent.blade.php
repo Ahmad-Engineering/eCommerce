@@ -31,8 +31,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('ecommerce//app-assets/css/colors.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('ecommerce//app-assets/css/components.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('ecommerce//app-assets/css/themes/dark-layout.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('ecommerce//app-assets/css/themes/bordered-layout.css"') }}>
-    <link rel=" stylesheet" type="text/css"
+    <link rel="stylesheet" type="text/css" href="{{ asset('ecommerce//app-assets/css/themes/bordered-layout.css') }}">
+    <link rel="stylesheet" type="text/css"
         href="{{ asset('ecommerce//app-assets/css/themes/semi-dark-layout.css') }}">
 
     <!-- BEGIN: Page CSS-->
@@ -886,10 +886,9 @@
                         <!--/ Medal Card -->
 
                         <!-- Statistics Card -->
-                        @yield('content')
+                        
                         <div class="col-xl-12 col-md-12 col-12">
-                            <div class="card card-statistics">
-                            </div>
+                            @yield('content')
                         </div>
                         <!--/ Statistics Card -->
                     </div>

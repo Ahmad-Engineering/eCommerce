@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminActivity;
 use App\Models\Branch;
 use App\Models\Client;
 use App\Models\Contract;
@@ -128,15 +129,19 @@ class ContractController extends Controller
                 $contract->type = $contractType->type;
                 $isCreated = $contract->save();
 
+                $adminActivity = new AdminActivity();
+                $adminActivity->activity = 'You\'re made new contract: ' . $contract->title . '.';
+                $adminActivity->admin_id = auth('admin')->user()->id;
+                $adminActivity->save();
+
                 $store->amount = $store->amount - $request->get('peice_no');
 
                 return response()->json([
                     'message' => $isCreated ? 'Contracted Successfully' : 'Faild to save contract',
                 ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
-            }else {
+            } else {
                 return redirect()->route('contract.create');
             }
-
         } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first()
@@ -227,6 +232,11 @@ class ContractController extends Controller
             $contract->type = $contractType->type;
             $isUpdated = $contract->save();
 
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re updated ' . $contract->title . ' contract.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
+
             return response()->json([
                 'message' => $isUpdated ? 'Contract updated successfully' : 'Faild to update contract',
             ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
@@ -253,6 +263,10 @@ class ContractController extends Controller
             return redirect()->route('contract.index');
         //
         if ($contract->delete()) {
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re deleted ' . $contract->title . ' contract.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
             return response()->json([
                 'icon' => 'success',
                 'title' => 'Deleted',

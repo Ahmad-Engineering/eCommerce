@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminActivity;
 use App\Models\Client;
 use App\Models\ClientInfo;
 use App\Models\Contract;
@@ -40,6 +41,10 @@ class PDFController extends Controller
         $pdf = Pdf::loadView('ecommerce.pdf.admin-client-contract', [
             'contract' => $contract,
         ]);
+        $adminActivity = new AdminActivity();
+        $adminActivity->activity = 'You\'re printing ' . $contract->title . ' contract.';
+        $adminActivity->admin_id = auth('admin')->user()->id;
+        $adminActivity->save();
         return $pdf->download('contract.pdf');
     }
 
@@ -57,6 +62,10 @@ class PDFController extends Controller
         $client_pdf = Pdf::loadView('ecommerce.pdf.admin-clients', [
             'clients' => $clients,
         ]);
+        $adminActivity = new AdminActivity();
+        $adminActivity->activity = 'You\'re printed your clients information.';
+        $adminActivity->admin_id = auth('admin')->user()->id;
+        $adminActivity->save();
         return $client_pdf->download('clients.pdf');
     }
 
@@ -66,6 +75,10 @@ class PDFController extends Controller
         $stores_pdf = Pdf::loadView('ecommerce.pdf.admin-store', [
             'stores' => $stores,
         ]);
+        $adminActivity = new AdminActivity();
+        $adminActivity->activity = 'You\'re printed your stores information.';
+        $adminActivity->admin_id = auth('admin')->user()->id;
+        $adminActivity->save();
         return $stores_pdf->download('stores.pdf');
     }
 
@@ -74,14 +87,18 @@ class PDFController extends Controller
         $products = Product::where([
             ['status', '1'],
         ])
-        ->with('store', function($query) {
-            $query->where('admin_id', auth('admin')->user()->id);
-        })
-        ->get();
+            ->with('store', function ($query) {
+                $query->where('admin_id', auth('admin')->user()->id);
+            })
+            ->get();
 
         $products_pdf = Pdf::loadView('ecommerce.pdf.admin-products', [
             'products' => $products,
         ]);
+        $adminActivity = new AdminActivity();
+        $adminActivity->activity = 'You\'re printed your products information.';
+        $adminActivity->admin_id = auth('admin')->user()->id;
+        $adminActivity->save();
         return $products_pdf->download('products.pdf');
 
         // return response()->view('ecommerce.pdf.admin-products');

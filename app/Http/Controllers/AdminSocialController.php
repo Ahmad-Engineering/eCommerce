@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminActivity;
 use App\Models\AdminSocial;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
@@ -59,6 +60,11 @@ class AdminSocialController extends Controller
             $adminSocial->quora = $request->get('quora');
             $adminSocial->admin_id = auth('admin')->user()->id;
             $isCreated = $adminSocial->save();
+
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re updated your social media links.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
 
             return response()->json([
                 'message' => $isCreated ? 'Links added successfully' : 'Faild to add links',

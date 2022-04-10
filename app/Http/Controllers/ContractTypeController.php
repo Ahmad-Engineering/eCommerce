@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminActivity;
 use App\Models\Client;
 use App\Models\ContractType;
 use Dotenv\Validator;
@@ -55,10 +56,15 @@ class ContractTypeController extends Controller
             $contractType->admin_id = auth('admin')->user()->id;
             $isCreated = $contractType->save();
 
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re added new contract type: ' . $contractType->type . '.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
+
             return response()->json([
                 'message' => $isCreated ? 'Contract type added successfully' : 'Faild to add contract type',
             ], $isCreated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
-        }else {
+        } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first()
             ], Response::HTTP_BAD_REQUEST);
@@ -109,10 +115,15 @@ class ContractTypeController extends Controller
             $contractType->status = $request->get('status') == 'active' ? '1' : '0';
             $isUpdated = $contractType->save();
 
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re updated ' . $contractType->type . ' contract type.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
+
             return response()->json([
                 'message' => $isUpdated ? 'Contract type updated successfully' : 'Faild to update contract type',
             ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
-        }else {
+        } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first(),
             ], Response::HTTP_BAD_REQUEST);
@@ -129,12 +140,16 @@ class ContractTypeController extends Controller
     {
         //
         if ($contractType->delete()) {
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re deleted ' . $contractType->type . '.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
             return response()->json([
                 'icon' => 'success',
                 'title' => 'Deleted',
                 'text' => 'Contract type successfully deleted',
             ], Response::HTTP_OK);
-        }else {
+        } else {
             return response()->json([
                 'icon' => 'error',
                 'title' => 'Faild',

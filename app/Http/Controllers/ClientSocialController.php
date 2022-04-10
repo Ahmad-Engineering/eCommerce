@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminActivity;
+use App\Models\Client;
 use App\Models\ClientSocial;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
@@ -42,10 +44,11 @@ class ClientSocialController extends Controller
         ]);
         //
         if (!$validator->fails()) {
+            $client = Client::where('id', $request->get('client_id'))->first();
 
             // Is The Client Socials Media Links Is Exists Or Not ?!
             $socials = ClientSocial::find($request->get('client_id'));
-            if(is_null($socials))
+            if (is_null($socials))
                 $clientSocial = new ClientSocial();
             else
                 $clientSocial = $socials;
@@ -60,10 +63,15 @@ class ClientSocialController extends Controller
 
             $isCreated = $clientSocial->save();
 
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re added for ' . $client->name . ' client social links.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
+
             return response()->json([
                 'message' => $isCreated ? 'Social links added successfully' : 'Faild to add social links',
             ], $isCreated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
-        }else {
+        } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first(),
             ], Response::HTTP_BAD_REQUEST);

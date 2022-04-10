@@ -15,6 +15,10 @@ class AdminActivityController extends Controller
     public function index()
     {
         //
+        $activities = AdminActivity::where('admin_id', auth('admin')->user()->id)->latest('created_at')->get();
+        return response()->view('ecommerce.admin.activities.index', [
+            'activities' => $activities,
+        ]);
     }
 
     /**
@@ -33,9 +37,13 @@ class AdminActivityController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($activityName)
     {
         //
+        $adminActivity = new AdminActivity();
+        $adminActivity->activity = $activityName;
+        $adminActivity->admin_id = auth('admin')->user()->id;
+        $adminActivity->save();
     }
 
     /**

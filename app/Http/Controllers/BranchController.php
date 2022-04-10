@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminActivity;
 use App\Models\Branch;
 use App\Models\Contract;
 use App\Models\Store;
@@ -102,6 +103,11 @@ class BranchController extends Controller
             $branch->goods_amount = $contract->peice_no;
             $branch->type = $request->get('branch_type');
 
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re created new branch: ' . $branch->name . ', with contract number: ' . $contract->id . '.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
+
             if (auth('admin')->check()) {
                 $branch->position = 'admin';
                 $branch->admin_id = auth('admin')->user()->id;
@@ -192,6 +198,11 @@ class BranchController extends Controller
             $branch->address = $request->get('branch_address');
             $branch->type = $request->get('branch_type');
             $isUpdated = $branch->save();
+
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re updated branch: ' . $branch->name . '.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
 
             return response()->json([
                 'message' => $isUpdated ? 'Branch updated successfully' : 'Faild to update branch',

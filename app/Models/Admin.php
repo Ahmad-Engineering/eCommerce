@@ -47,4 +47,8 @@ class Admin extends Authenticatable
     public function activities () {
         return $this->hasMany(AdminActivity::class, 'admin_id', 'id');
     }
+
+    public function products () {
+        return $this->hasMany(Product::class, 'admin_id', 'id');
+    }
 }

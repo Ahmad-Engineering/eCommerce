@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminActivity;
 use App\Models\Product;
 use App\Models\Store;
 use Dotenv\Validator;
@@ -60,11 +61,15 @@ class StoreController extends Controller
             $store->admin_id = auth('admin')->user()->id;
             $isCreated = $store->save();
 
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re added new store: ' . $store->name . '.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
+
             return response()->json([
                 'message' => $isCreated ? 'Store created successfully' : 'Faild to create new store',
             ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
-
-        }else {
+        } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first(),
             ], Response::HTTP_BAD_REQUEST);
@@ -136,6 +141,11 @@ class StoreController extends Controller
             $store->price_after_offer = ($request->get('piece_price') - ($request->get('piece_price') / 100) * $request->get('special_offer'));
             $isUpdated = $store->save();
 
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re updated ' . $store->name . ' store information.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
+
             Product::where([
                 ['store_id', $store->id],
             ])->update([
@@ -145,8 +155,7 @@ class StoreController extends Controller
             return response()->json([
                 'message' => $isUpdated ? 'Store updated successfully' : 'Faild to update store',
             ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
-
-        }else {
+        } else {
             return response()->json([
                 'message' => $validator->getMessageBag()->first(),
             ], Response::HTTP_BAD_REQUEST);
@@ -169,12 +178,16 @@ class StoreController extends Controller
             return redirect()->route('store.index');
         //
         if ($store->delete()) {
+            $adminActivity = new AdminActivity();
+            $adminActivity->activity = 'You\'re deleted ' . $store->name . ' store.';
+            $adminActivity->admin_id = auth('admin')->user()->id;
+            $adminActivity->save();
             return response()->json([
                 'icon' => 'success',
                 'title' => 'Deleted',
                 'text' => 'Store deleted successfully',
             ], Response::HTTP_OK);
-        }else {
+        } else {
             return response()->json([
                 'icon' => 'error',
                 'title' => 'Faild',

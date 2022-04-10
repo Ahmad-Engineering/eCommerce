@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminAccountSettingsController;
+use App\Http\Controllers\AdminActivityController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminInfoController;
 use App\Http\Controllers\AdminSocialController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\ClientInfoController;
 use App\Http\Controllers\ClientSocialController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\ContractTypeController;
+use App\Http\Controllers\MarketController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProductController;
@@ -70,6 +72,8 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
         Route::resource('admin-info', AdminInfoController::class);
         // Admin Social Media Links
         Route::resource('admin-social', AdminSocialController::class);
+        // Admin Activities
+        Route::resource('admin-activities', AdminActivityController::class);
         // Change Admin Password
         Route::get('change-password', [AdminAccountSettingsController::class, 'showChangePassword'])->name('change.admin.password');
         Route::put('change-password', [AdminAccountSettingsController::class, 'changePassword']);
@@ -122,6 +126,10 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
         return view('ecommerce.index');
     })->name('home');
 
+    Route::prefix('market')->group(function () {
+        Route::get('/', [MarketController::class, 'showMarket'])->name('show.market');
+    });
+
     // Logout Route
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
@@ -129,8 +137,6 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
 Route::fallback(function () {
     return view('ecommerce.page-not-found');
 });
-
-
 
 // Test Route
 Route::get('test', function () {
